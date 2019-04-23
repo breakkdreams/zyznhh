@@ -1,0 +1,1 @@
+INSERT INTO `zy_module` (`module`, `name`, `url`, `iscore`, `version`, `description`, `setting`, `listorder`, `disabled`, `installdate`, `updatedate`) VALUES ('advertisement', '广告模块', 'advertisement/', 0, '1.0', '广告模块', '', 0, 0, '2019-3-05', '2019-3-05');
