@@ -65,7 +65,7 @@ class goodsApi{
 
         //二级分类
         $catsql = 'SELECT id,cate_name,cate_img FROM zy_goodscat WHERE pid > 0 ORDER BY sort';
-        $cate_list = $this->get_db->multi_listinfo($catsql,$page = 1,$pagesize = 4);
+        $cate_list = $this->get_db->multi_listinfo($catsql,$page = 1,$pagesize = 8);
 
         $result = [
             'status'=>'success',
