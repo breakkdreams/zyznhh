@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2019-04-23 14:21:39
+Date: 2019-04-24 17:04:49
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -38,7 +38,7 @@ CREATE TABLE `zy_admin` (
 -- ----------------------------
 -- Records of zy_admin
 -- ----------------------------
-INSERT INTO `zy_admin` VALUES ('1', 'phpcms', '8fad352beac6e39ae345eb2ac63b2cd4', '1', 'AzUN1V', '', '1555997978', '605468025@qq.com', '', '', '');
+INSERT INTO `zy_admin` VALUES ('1', 'phpcms', '8fad352beac6e39ae345eb2ac63b2cd4', '1', 'AzUN1V', '', '1556077582', '605468025@qq.com', '', '', '');
 
 -- ----------------------------
 -- Table structure for zy_admin_panel
@@ -198,11 +198,15 @@ CREATE TABLE `zy_attachment` (
   `siteid` smallint(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`aid`),
   KEY `authcode` (`authcode`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of zy_attachment
 -- ----------------------------
+INSERT INTO `zy_attachment` VALUES ('1', 'content', '6', '5cff5cb21cbeadbf471d31ced7073e04.jpg', '2019/0424/20190424020158406.jpg', '215240', 'jpg', '1', '0', '0', '1', '1556085717', '', '0', 'fb436f37723d6d581f5d281d513c18c9', '1');
+INSERT INTO `zy_attachment` VALUES ('2', 'content', '0', '20170111054725u04tgic0w2d152895.jpg', '2019/0424/20190424020208537.jpg', '165981', 'jpg', '1', '0', '0', '1', '1556085727', '', '0', '10001b91dd1e822058dd8a7150123f95', '1');
+INSERT INTO `zy_attachment` VALUES ('3', 'content', '0', 'ecbe3eaedd512a5c75a197302f24cac9.jpg', '2019/0424/20190424020211740.jpg', '146675', 'jpg', '1', '0', '0', '1', '1556085730', '', '0', '4d3ba9912f3eca14b4eff10eebf8c819', '1');
+INSERT INTO `zy_attachment` VALUES ('4', 'content', '6', '245290cb740afa9508e644694d2752a4.jpg', '2019/0424/20190424022107707.jpg', '161647', 'jpg', '1', '0', '0', '1', '1556086866', '', '0', '4ab2898380cbcb50e414eb1e4ab3a437', '1');
 
 -- ----------------------------
 -- Table structure for zy_attachment_index
@@ -875,6 +879,7 @@ CREATE TABLE `zy_goods` (
   `thumb` varchar(100) NOT NULL COMMENT '商品主图',
   `album` text NOT NULL COMMENT '商品相册',
   `content` text NOT NULL COMMENT '商品内容信息',
+  `score_price` decimal(10,2) NOT NULL COMMENT '积分价',
   `market_price` decimal(10,2) NOT NULL COMMENT '市场价',
   `shop_price` decimal(10,2) NOT NULL COMMENT '本店价',
   `on_sale` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否上架 1：上架 2：下架',
@@ -887,11 +892,12 @@ CREATE TABLE `zy_goods` (
   `isspec` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否有规格数据（1有 0无）',
   `addtime` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of zy_goods
 -- ----------------------------
+INSERT INTO `zy_goods` VALUES ('2', '1', 'XBOX ONE X', '主机主机', 'http://localhost/zyznhh/uploadfile/2019/0424/20190424020158406.jpg', '{\"0\":{\"url\":\"http:\\/\\/localhost\\/zyznhh\\/uploadfile\\/2019\\/0424\\/20190424020208537.jpg\",\"alt\":\"20170111054725u04tgic0w2d152895\"},\"1\":{\"url\":\"http:\\/\\/localhost\\/zyznhh\\/uploadfile\\/2019\\/0424\\/20190424020211740.jpg\",\"alt\":\"ecbe3eaedd512a5c75a197302f24cac9\"}}', '这是详情介绍', '200.00', '2000.00', '1998.00', '1', '3996', '0', '5', '0', '2', '1', '1', '1556085773');
 
 -- ----------------------------
 -- Table structure for zy_goodsattr
@@ -929,7 +935,7 @@ CREATE TABLE `zy_goodscarts` (
   `cartnum` int(11) NOT NULL DEFAULT '0' COMMENT '购买数量',
   PRIMARY KEY (`id`),
   KEY `userId` (`userid`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of zy_goodscarts
@@ -954,9 +960,9 @@ CREATE TABLE `zy_goodscat` (
 -- Records of zy_goodscat
 -- ----------------------------
 INSERT INTO `zy_goodscat` VALUES ('1', '衣服', '', '1', '衣服', '500', '0');
-INSERT INTO `zy_goodscat` VALUES ('3', '男装', '', '1', '男装', '500', '1');
+INSERT INTO `zy_goodscat` VALUES ('3', '男装', 'http://localhost/zyznhh/uploadfile/2019/0424/20190424022107707.jpg', '1', '男装', '500', '1');
 INSERT INTO `zy_goodscat` VALUES ('4', '数码', '', '1', '', '500', '0');
-INSERT INTO `zy_goodscat` VALUES ('5', '主机', '', '1', '', '500', '4');
+INSERT INTO `zy_goodscat` VALUES ('5', '主机', 'http://localhost/zyznhh/uploadfile/2019/0424/20190424020208537.jpg', '1', '', '500', '4');
 
 -- ----------------------------
 -- Table structure for zy_goodspositem
@@ -970,6 +976,7 @@ CREATE TABLE `zy_goodspositem` (
 -- ----------------------------
 -- Records of zy_goodspositem
 -- ----------------------------
+INSERT INTO `zy_goodspositem` VALUES ('1', '2');
 
 -- ----------------------------
 -- Table structure for zy_goodsposition
@@ -980,11 +987,12 @@ CREATE TABLE `zy_goodsposition` (
   `posname` varchar(60) NOT NULL COMMENT '推荐位名称',
   `sort` smallint(6) NOT NULL DEFAULT '500' COMMENT '排序',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of zy_goodsposition
 -- ----------------------------
+INSERT INTO `zy_goodsposition` VALUES ('1', '首页', '500');
 
 -- ----------------------------
 -- Table structure for zy_goodstype
@@ -1065,11 +1073,15 @@ CREATE TABLE `zy_goods_specs` (
   `salenum` int(11) NOT NULL COMMENT '销量',
   `status` tinyint(1) NOT NULL COMMENT '是否启用（1启用 0禁用）',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of zy_goods_specs
 -- ----------------------------
+INSERT INTO `zy_goods_specs` VALUES ('5', '1', '2', '1-1', '500G,白色', '0.00', '2000.00', '999', '0', '1');
+INSERT INTO `zy_goods_specs` VALUES ('6', '1', '2', '1-2', '500G,黑色', '0.00', '2000.00', '999', '0', '1');
+INSERT INTO `zy_goods_specs` VALUES ('7', '1', '2', '2-1', '1T,白色', '0.00', '2000.00', '999', '0', '1');
+INSERT INTO `zy_goods_specs` VALUES ('8', '1', '2', '2-2', '1T,黑色', '0.00', '2000.00', '999', '0', '1');
 
 -- ----------------------------
 -- Table structure for zy_hits
@@ -4513,7 +4525,7 @@ CREATE TABLE `zy_log` (
   PRIMARY KEY (`logid`),
   KEY `module` (`module`,`file`,`action`),
   KEY `username` (`username`,`action`)
-) ENGINE=MyISAM AUTO_INCREMENT=125 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=299 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of zy_log
@@ -4642,6 +4654,180 @@ INSERT INTO `zy_log` VALUES ('121', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c
 INSERT INTO `zy_log` VALUES ('122', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=typeattr', '', '1', 'phpcms', '', '2019-04-23 14:14:27');
 INSERT INTO `zy_log` VALUES ('123', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-23 14:14:31');
 INSERT INTO `zy_log` VALUES ('124', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsadd', '', '1', 'phpcms', '', '2019-04-23 14:14:35');
+INSERT INTO `zy_log` VALUES ('125', '', '0', 'advertisement', '', 'space', '?m=advertisement&c=space&a=add', '', '1', 'phpcms', '', '2019-04-23 14:33:42');
+INSERT INTO `zy_log` VALUES ('126', '', '0', 'zymessagesys', '', 'messagesys', '?m=zymessagesys&c=messagesys&a=sms_confing', '', '1', 'phpcms', '', '2019-04-23 14:33:58');
+INSERT INTO `zy_log` VALUES ('127', '', '0', 'zymessagesys', '', 'messagesys', '?m=zymessagesys&c=messagesys&a=message_manage', '', '1', 'phpcms', '', '2019-04-23 14:34:01');
+INSERT INTO `zy_log` VALUES ('128', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=manage', '', '1', 'phpcms', '', '2019-04-23 14:34:14');
+INSERT INTO `zy_log` VALUES ('129', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=manage_add', '', '1', 'phpcms', '', '2019-04-23 14:34:20');
+INSERT INTO `zy_log` VALUES ('130', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model', '', '1', 'phpcms', '', '2019-04-23 14:34:24');
+INSERT INTO `zy_log` VALUES ('131', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=config', '', '1', 'phpcms', '', '2019-04-23 14:34:29');
+INSERT INTO `zy_log` VALUES ('132', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model', '', '1', 'phpcms', '', '2019-04-23 14:34:36');
+INSERT INTO `zy_log` VALUES ('133', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=group', '', '1', 'phpcms', '', '2019-04-23 14:34:38');
+INSERT INTO `zy_log` VALUES ('134', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model', '', '1', 'phpcms', '', '2019-04-23 14:34:46');
+INSERT INTO `zy_log` VALUES ('135', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model_field', '', '1', 'phpcms', '', '2019-04-23 14:34:53');
+INSERT INTO `zy_log` VALUES ('136', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=manage', '', '1', 'phpcms', '', '2019-04-23 14:35:03');
+INSERT INTO `zy_log` VALUES ('137', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=manage_add', '', '1', 'phpcms', '', '2019-04-23 14:35:08');
+INSERT INTO `zy_log` VALUES ('138', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=manage_add', '', '1', 'phpcms', '', '2019-04-23 14:35:50');
+INSERT INTO `zy_log` VALUES ('139', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=manage_add', '', '1', 'phpcms', '', '2019-04-23 14:36:16');
+INSERT INTO `zy_log` VALUES ('140', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=manage_add', '', '1', 'phpcms', '', '2019-04-23 14:37:24');
+INSERT INTO `zy_log` VALUES ('141', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=manage', '', '1', 'phpcms', '', '2019-04-23 14:37:26');
+INSERT INTO `zy_log` VALUES ('142', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=manage_view', '', '1', 'phpcms', '', '2019-04-23 14:37:37');
+INSERT INTO `zy_log` VALUES ('143', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=manage_edit', '', '1', 'phpcms', '', '2019-04-23 14:37:44');
+INSERT INTO `zy_log` VALUES ('144', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model', '', '1', 'phpcms', '', '2019-04-23 14:37:52');
+INSERT INTO `zy_log` VALUES ('145', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model_field', '', '1', 'phpcms', '', '2019-04-23 14:38:00');
+INSERT INTO `zy_log` VALUES ('146', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model_field_add', '', '1', 'phpcms', '', '2019-04-23 14:38:27');
+INSERT INTO `zy_log` VALUES ('147', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model_field_add', '', '1', 'phpcms', '', '2019-04-23 14:39:26');
+INSERT INTO `zy_log` VALUES ('148', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model_field', '', '1', 'phpcms', '', '2019-04-23 14:39:28');
+INSERT INTO `zy_log` VALUES ('149', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model_field_add', '', '1', 'phpcms', '', '2019-04-23 14:39:44');
+INSERT INTO `zy_log` VALUES ('150', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model_field_add', '', '1', 'phpcms', '', '2019-04-23 14:40:22');
+INSERT INTO `zy_log` VALUES ('151', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model', '', '1', 'phpcms', '', '2019-04-23 14:40:35');
+INSERT INTO `zy_log` VALUES ('152', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model_field', '', '1', 'phpcms', '', '2019-04-23 14:40:41');
+INSERT INTO `zy_log` VALUES ('153', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model_field_add', '', '1', 'phpcms', '', '2019-04-23 14:40:45');
+INSERT INTO `zy_log` VALUES ('154', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model_field_add', '', '1', 'phpcms', '', '2019-04-23 14:41:08');
+INSERT INTO `zy_log` VALUES ('155', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model_field_add', '', '1', 'phpcms', '', '2019-04-23 14:41:41');
+INSERT INTO `zy_log` VALUES ('156', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model_field_add', '', '1', 'phpcms', '', '2019-04-23 14:41:55');
+INSERT INTO `zy_log` VALUES ('157', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model_field', '', '1', 'phpcms', '', '2019-04-23 14:41:57');
+INSERT INTO `zy_log` VALUES ('158', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=config', '', '1', 'phpcms', '', '2019-04-23 14:42:16');
+INSERT INTO `zy_log` VALUES ('159', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model', '', '1', 'phpcms', '', '2019-04-23 14:42:20');
+INSERT INTO `zy_log` VALUES ('160', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model_field', '', '1', 'phpcms', '', '2019-04-23 14:42:24');
+INSERT INTO `zy_log` VALUES ('161', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=manage', '', '1', 'phpcms', '', '2019-04-23 14:42:30');
+INSERT INTO `zy_log` VALUES ('162', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model', '', '1', 'phpcms', '', '2019-04-23 14:42:40');
+INSERT INTO `zy_log` VALUES ('163', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model_field', '', '1', 'phpcms', '', '2019-04-23 14:42:43');
+INSERT INTO `zy_log` VALUES ('164', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model', '', '1', 'phpcms', '', '2019-04-23 14:43:33');
+INSERT INTO `zy_log` VALUES ('165', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model_field', '', '1', 'phpcms', '', '2019-04-23 14:43:37');
+INSERT INTO `zy_log` VALUES ('166', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model_field_del', '', '1', 'phpcms', '', '2019-04-23 14:43:42');
+INSERT INTO `zy_log` VALUES ('167', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model_field', '', '1', 'phpcms', '', '2019-04-23 14:43:45');
+INSERT INTO `zy_log` VALUES ('168', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model_field_del', '', '1', 'phpcms', '', '2019-04-23 14:43:49');
+INSERT INTO `zy_log` VALUES ('169', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=model_field', '', '1', 'phpcms', '', '2019-04-23 14:43:53');
+INSERT INTO `zy_log` VALUES ('170', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=zyconfig', '', '1', 'phpcms', '', '2019-04-23 14:44:18');
+INSERT INTO `zy_log` VALUES ('171', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-23 14:44:20');
+INSERT INTO `zy_log` VALUES ('172', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsadd', '', '1', 'phpcms', '', '2019-04-23 14:50:27');
+INSERT INTO `zy_log` VALUES ('173', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=getattr', '', '1', 'phpcms', '', '2019-04-23 14:50:34');
+INSERT INTO `zy_log` VALUES ('174', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsadd', '', '1', 'phpcms', '', '2019-04-23 14:50:49');
+INSERT INTO `zy_log` VALUES ('175', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsadds', '', '1', 'phpcms', '', '2019-04-23 14:50:52');
+INSERT INTO `zy_log` VALUES ('176', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-23 14:50:54');
+INSERT INTO `zy_log` VALUES ('177', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsedit', '', '1', 'phpcms', '', '2019-04-23 14:50:59');
+INSERT INTO `zy_log` VALUES ('178', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsedit', '', '1', 'phpcms', '', '2019-04-23 14:51:04');
+INSERT INTO `zy_log` VALUES ('179', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsedits', '', '1', 'phpcms', '', '2019-04-23 14:51:07');
+INSERT INTO `zy_log` VALUES ('180', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-23 14:51:09');
+INSERT INTO `zy_log` VALUES ('181', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsdisagree', '', '1', 'phpcms', '', '2019-04-23 14:51:18');
+INSERT INTO `zy_log` VALUES ('182', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-23 14:51:21');
+INSERT INTO `zy_log` VALUES ('183', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsverify', '', '1', 'phpcms', '', '2019-04-23 14:51:26');
+INSERT INTO `zy_log` VALUES ('184', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsbrand', '', '1', 'phpcms', '', '2019-04-23 14:51:31');
+INSERT INTO `zy_log` VALUES ('185', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsposition', '', '1', 'phpcms', '', '2019-04-23 14:51:34');
+INSERT INTO `zy_log` VALUES ('186', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-23 14:51:36');
+INSERT INTO `zy_log` VALUES ('187', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-23 14:51:37');
+INSERT INTO `zy_log` VALUES ('188', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsverify', '', '1', 'phpcms', '', '2019-04-23 14:51:40');
+INSERT INTO `zy_log` VALUES ('189', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsverify', '', '1', 'phpcms', '', '2019-04-23 14:51:43');
+INSERT INTO `zy_log` VALUES ('190', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsverify', '', '1', 'phpcms', '', '2019-04-23 14:51:43');
+INSERT INTO `zy_log` VALUES ('191', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsverify', '', '1', 'phpcms', '', '2019-04-23 14:51:44');
+INSERT INTO `zy_log` VALUES ('192', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsverify', '', '1', 'phpcms', '', '2019-04-23 14:51:45');
+INSERT INTO `zy_log` VALUES ('193', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsverify', '', '1', 'phpcms', '', '2019-04-23 14:51:45');
+INSERT INTO `zy_log` VALUES ('194', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsagree', '', '1', 'phpcms', '', '2019-04-23 14:51:51');
+INSERT INTO `zy_log` VALUES ('195', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-23 14:51:53');
+INSERT INTO `zy_log` VALUES ('196', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsverify', '', '1', 'phpcms', '', '2019-04-23 14:51:54');
+INSERT INTO `zy_log` VALUES ('197', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-23 14:51:58');
+INSERT INTO `zy_log` VALUES ('198', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsdel', '', '1', 'phpcms', '', '2019-04-23 14:52:03');
+INSERT INTO `zy_log` VALUES ('199', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-23 14:52:06');
+INSERT INTO `zy_log` VALUES ('200', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=zyconfig', '', '1', 'phpcms', '', '2019-04-23 14:53:21');
+INSERT INTO `zy_log` VALUES ('201', '', '0', 'zyaddr', '', 'zyaddr', '?m=zyaddr&c=zyaddr&a=zyconfig', '', '1', 'phpcms', '', '2019-04-23 14:53:24');
+INSERT INTO `zy_log` VALUES ('202', '', '0', 'zyaddr', '', 'zyaddr', '?m=zyaddr&c=zyaddr&a=zyconfig', '', '1', 'phpcms', '', '2019-04-23 14:53:27');
+INSERT INTO `zy_log` VALUES ('203', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=zyconfig', '', '1', 'phpcms', '', '2019-04-23 14:53:27');
+INSERT INTO `zy_log` VALUES ('204', '', '0', 'member', '', 'member', '?m=member&c=member&a=manage', '', '1', 'phpcms', '', '2019-04-23 14:53:37');
+INSERT INTO `zy_log` VALUES ('205', '', '0', 'member', '', 'member', '?m=member&c=member&a=delete', '', '1', 'phpcms', '', '2019-04-23 14:53:58');
+INSERT INTO `zy_log` VALUES ('206', '', '0', 'member', '', 'member_verify', '?m=member&c=member_verify&a=manage', '', '1', 'phpcms', '', '2019-04-23 14:54:03');
+INSERT INTO `zy_log` VALUES ('207', '', '0', 'member', '', 'member', '?m=member&c=member&a=manage', '', '1', 'phpcms', '', '2019-04-23 14:54:03');
+INSERT INTO `zy_log` VALUES ('208', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=manage', '', '1', 'phpcms', '', '2019-04-23 14:54:11');
+INSERT INTO `zy_log` VALUES ('209', '', '0', 'zyorder', '', 'order', '?m=zyorder&c=order&a=order_list', '', '1', 'phpcms', '', '2019-04-23 14:57:48');
+INSERT INTO `zy_log` VALUES ('210', '', '0', 'zyorder', '', 'order', '?m=zyorder&c=order&a=order_manage_del', '', '1', 'phpcms', '', '2019-04-23 14:58:00');
+INSERT INTO `zy_log` VALUES ('211', '', '0', 'zyorder', '', 'order', '?m=zyorder&c=order&a=order_list', '', '1', 'phpcms', '', '2019-04-23 14:58:03');
+INSERT INTO `zy_log` VALUES ('212', '', '0', 'zyorder', '', 'order', '?m=zyorder&c=order&a=order_list', '', '1', 'phpcms', '', '2019-04-23 14:58:04');
+INSERT INTO `zy_log` VALUES ('213', '', '0', 'zyorder', '', 'order', '?m=zyorder&c=order&a=order_manage_del', '', '1', 'phpcms', '', '2019-04-23 14:58:08');
+INSERT INTO `zy_log` VALUES ('214', '', '0', 'zyorder', '', 'order', '?m=zyorder&c=order&a=order_list', '', '1', 'phpcms', '', '2019-04-23 14:58:12');
+INSERT INTO `zy_log` VALUES ('215', '', '0', 'zyorder', '', 'order', '?m=zyorder&c=order&a=order_manage_del', '', '1', 'phpcms', '', '2019-04-23 14:58:16');
+INSERT INTO `zy_log` VALUES ('216', '', '0', 'zyorder', '', 'order', '?m=zyorder&c=order&a=order_list', '', '1', 'phpcms', '', '2019-04-23 14:58:19');
+INSERT INTO `zy_log` VALUES ('217', '', '0', 'zyorder', '', 'order', '?m=zyorder&c=order&a=logistics_company', '', '1', 'phpcms', '', '2019-04-23 14:58:22');
+INSERT INTO `zy_log` VALUES ('218', '', '0', 'admin', '', 'index', '?m=admin&c=index&a=login', '', '1', '', '', '2019-04-23 16:17:49');
+INSERT INTO `zy_log` VALUES ('219', '', '0', 'admin', '', 'index', '?m=admin&c=index&a=login', '', '0', 'phpcms', '', '2019-04-24 11:46:05');
+INSERT INTO `zy_log` VALUES ('220', '', '0', 'admin', '', 'index', '?m=admin&c=index&a=login', '', '0', 'phpcms', '', '2019-04-24 11:46:06');
+INSERT INTO `zy_log` VALUES ('221', '', '0', 'admin', '', 'index', '?m=admin&c=index&a=login', '', '0', 'phpcms', '', '2019-04-24 11:46:22');
+INSERT INTO `zy_log` VALUES ('222', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-24 11:46:42');
+INSERT INTO `zy_log` VALUES ('223', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsadd', '', '1', 'phpcms', '', '2019-04-24 11:49:26');
+INSERT INTO `zy_log` VALUES ('224', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodstype', '', '1', 'phpcms', '', '2019-04-24 11:49:39');
+INSERT INTO `zy_log` VALUES ('225', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=catsort', '', '1', 'phpcms', '', '2019-04-24 11:49:42');
+INSERT INTO `zy_log` VALUES ('226', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=zyconfig', '', '1', 'phpcms', '', '2019-04-24 11:49:52');
+INSERT INTO `zy_log` VALUES ('227', '', '0', 'zyfunds', '', 'zyfunds', '?m=zyfunds&c=zyfunds&a=configedit', '', '1', 'phpcms', '', '2019-04-24 11:50:00');
+INSERT INTO `zy_log` VALUES ('228', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=zyconfig', '', '1', 'phpcms', '', '2019-04-24 11:50:00');
+INSERT INTO `zy_log` VALUES ('229', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-24 11:50:13');
+INSERT INTO `zy_log` VALUES ('230', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsbrand', '', '1', 'phpcms', '', '2019-04-24 11:50:17');
+INSERT INTO `zy_log` VALUES ('231', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-24 11:50:20');
+INSERT INTO `zy_log` VALUES ('232', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-24 13:59:27');
+INSERT INTO `zy_log` VALUES ('233', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsadd', '', '1', 'phpcms', '', '2019-04-24 13:59:30');
+INSERT INTO `zy_log` VALUES ('234', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=getattr', '', '1', 'phpcms', '', '2019-04-24 14:00:24');
+INSERT INTO `zy_log` VALUES ('235', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-24 14:00:59');
+INSERT INTO `zy_log` VALUES ('236', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsadd', '', '1', 'phpcms', '', '2019-04-24 14:01:02');
+INSERT INTO `zy_log` VALUES ('237', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=getattr', '', '1', 'phpcms', '', '2019-04-24 14:01:21');
+INSERT INTO `zy_log` VALUES ('238', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsadd', '', '1', 'phpcms', '', '2019-04-24 14:02:52');
+INSERT INTO `zy_log` VALUES ('239', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsadds', '', '1', 'phpcms', '', '2019-04-24 14:02:55');
+INSERT INTO `zy_log` VALUES ('240', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-24 14:02:58');
+INSERT INTO `zy_log` VALUES ('241', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsadd', '', '1', 'phpcms', '', '2019-04-24 14:03:06');
+INSERT INTO `zy_log` VALUES ('242', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-24 14:04:20');
+INSERT INTO `zy_log` VALUES ('243', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsedit', '', '1', 'phpcms', '', '2019-04-24 14:04:23');
+INSERT INTO `zy_log` VALUES ('244', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-24 14:08:13');
+INSERT INTO `zy_log` VALUES ('245', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=zyconfig', '', '1', 'phpcms', '', '2019-04-24 14:16:20');
+INSERT INTO `zy_log` VALUES ('246', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-24 14:16:42');
+INSERT INTO `zy_log` VALUES ('247', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=catsort', '', '1', 'phpcms', '', '2019-04-24 14:20:24');
+INSERT INTO `zy_log` VALUES ('248', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=catedit', '', '1', 'phpcms', '', '2019-04-24 14:20:28');
+INSERT INTO `zy_log` VALUES ('249', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=checkcat_ajax', '', '1', 'phpcms', '', '2019-04-24 14:20:41');
+INSERT INTO `zy_log` VALUES ('250', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=catedit', '', '1', 'phpcms', '', '2019-04-24 14:20:44');
+INSERT INTO `zy_log` VALUES ('251', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=catedits', '', '1', 'phpcms', '', '2019-04-24 14:20:47');
+INSERT INTO `zy_log` VALUES ('252', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=catsort', '', '1', 'phpcms', '', '2019-04-24 14:20:49');
+INSERT INTO `zy_log` VALUES ('253', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=catedit', '', '1', 'phpcms', '', '2019-04-24 14:20:50');
+INSERT INTO `zy_log` VALUES ('254', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=checkcat_ajax', '', '1', 'phpcms', '', '2019-04-24 14:21:13');
+INSERT INTO `zy_log` VALUES ('255', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=catedit', '', '1', 'phpcms', '', '2019-04-24 14:21:15');
+INSERT INTO `zy_log` VALUES ('256', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=catedits', '', '1', 'phpcms', '', '2019-04-24 14:21:19');
+INSERT INTO `zy_log` VALUES ('257', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=catsort', '', '1', 'phpcms', '', '2019-04-24 14:21:21');
+INSERT INTO `zy_log` VALUES ('258', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsposition', '', '1', 'phpcms', '', '2019-04-24 14:42:46');
+INSERT INTO `zy_log` VALUES ('259', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=positionadd', '', '1', 'phpcms', '', '2019-04-24 14:44:34');
+INSERT INTO `zy_log` VALUES ('260', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=checkposition_ajax', '', '1', 'phpcms', '', '2019-04-24 14:44:40');
+INSERT INTO `zy_log` VALUES ('261', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=positionadd', '', '1', 'phpcms', '', '2019-04-24 14:44:42');
+INSERT INTO `zy_log` VALUES ('262', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=positionadds', '', '1', 'phpcms', '', '2019-04-24 14:44:46');
+INSERT INTO `zy_log` VALUES ('263', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsposition', '', '1', 'phpcms', '', '2019-04-24 14:44:48');
+INSERT INTO `zy_log` VALUES ('264', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=positionadd', '', '1', 'phpcms', '', '2019-04-24 14:44:49');
+INSERT INTO `zy_log` VALUES ('265', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=checkposition_ajax', '', '1', 'phpcms', '', '2019-04-24 14:44:56');
+INSERT INTO `zy_log` VALUES ('266', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=positionadd', '', '1', 'phpcms', '', '2019-04-24 14:44:59');
+INSERT INTO `zy_log` VALUES ('267', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=positionadds', '', '1', 'phpcms', '', '2019-04-24 14:45:02');
+INSERT INTO `zy_log` VALUES ('268', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=positionadds', '', '1', 'phpcms', '', '2019-04-24 14:45:02');
+INSERT INTO `zy_log` VALUES ('269', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsposition', '', '1', 'phpcms', '', '2019-04-24 14:45:04');
+INSERT INTO `zy_log` VALUES ('270', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-24 14:45:06');
+INSERT INTO `zy_log` VALUES ('271', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsedit', '', '1', 'phpcms', '', '2019-04-24 14:45:09');
+INSERT INTO `zy_log` VALUES ('272', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsedit', '', '1', 'phpcms', '', '2019-04-24 14:45:16');
+INSERT INTO `zy_log` VALUES ('273', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsedits', '', '1', 'phpcms', '', '2019-04-24 14:45:19');
+INSERT INTO `zy_log` VALUES ('274', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsedits', '', '1', 'phpcms', '', '2019-04-24 14:45:20');
+INSERT INTO `zy_log` VALUES ('275', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-24 14:45:22');
+INSERT INTO `zy_log` VALUES ('276', '', '0', 'advertisement', '', 'space', '?m=advertisement&c=space&a=add', '', '1', 'phpcms', '', '2019-04-24 14:51:30');
+INSERT INTO `zy_log` VALUES ('277', '', '0', 'advertisement', '', 'space', '?m=advertisement&c=space&a=setting', '', '1', 'phpcms', '', '2019-04-24 14:51:34');
+INSERT INTO `zy_log` VALUES ('278', '', '0', 'advertisement', '', 'space', '?m=advertisement&c=space&a=setting', '', '1', 'phpcms', '', '2019-04-24 14:51:39');
+INSERT INTO `zy_log` VALUES ('279', '', '0', 'advertisement', '', 'space', '?m=advertisement&c=space&a=add', '', '1', 'phpcms', '', '2019-04-24 14:51:45');
+INSERT INTO `zy_log` VALUES ('280', '', '0', 'advertisement', '', 'space', '?m=advertisement&c=space&a=poster_template', '', '1', 'phpcms', '', '2019-04-24 14:52:03');
+INSERT INTO `zy_log` VALUES ('281', '', '0', 'advertisement', '', 'space', '?m=advertisement&c=space&a=add', '', '1', 'phpcms', '', '2019-04-24 14:52:19');
+INSERT INTO `zy_log` VALUES ('282', '', '0', 'advertisement', '', 'space', '?m=advertisement&c=space&a=create_js', '', '1', 'phpcms', '', '2019-04-24 14:52:32');
+INSERT INTO `zy_log` VALUES ('283', '', '0', 'advertisement', '', 'space', '?m=advertisement&c=space&a=add', '', '1', 'phpcms', '', '2019-04-24 14:52:44');
+INSERT INTO `zy_log` VALUES ('284', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=zyconfig', '', '1', 'phpcms', '', '2019-04-24 14:53:02');
+INSERT INTO `zy_log` VALUES ('285', '', '0', 'zymember', '', 'zymember', '?m=zymember&c=zymember&a=zyconfig', '', '1', 'phpcms', '', '2019-04-24 14:53:22');
+INSERT INTO `zy_log` VALUES ('286', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-24 15:12:48');
+INSERT INTO `zy_log` VALUES ('287', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsposition', '', '1', 'phpcms', '', '2019-04-24 15:41:50');
+INSERT INTO `zy_log` VALUES ('288', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=positiondel', '', '1', 'phpcms', '', '2019-04-24 15:41:56');
+INSERT INTO `zy_log` VALUES ('289', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsposition', '', '1', 'phpcms', '', '2019-04-24 15:41:59');
+INSERT INTO `zy_log` VALUES ('290', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-24 15:42:01');
+INSERT INTO `zy_log` VALUES ('291', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsedit', '', '1', 'phpcms', '', '2019-04-24 15:42:05');
+INSERT INTO `zy_log` VALUES ('292', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsedit', '', '1', 'phpcms', '', '2019-04-24 16:50:27');
+INSERT INTO `zy_log` VALUES ('293', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodstype', '', '1', 'phpcms', '', '2019-04-24 16:50:48');
+INSERT INTO `zy_log` VALUES ('294', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=typeattr', '', '1', 'phpcms', '', '2019-04-24 16:50:53');
+INSERT INTO `zy_log` VALUES ('295', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=typeattradd', '', '1', 'phpcms', '', '2019-04-24 16:50:59');
+INSERT INTO `zy_log` VALUES ('296', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=typeattredit', '', '1', 'phpcms', '', '2019-04-24 16:51:04');
+INSERT INTO `zy_log` VALUES ('297', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodslist', '', '1', 'phpcms', '', '2019-04-24 16:51:14');
+INSERT INTO `zy_log` VALUES ('298', '', '0', 'hpshop', '', 'goods', '?m=hpshop&c=goods&a=goodsedit', '', '1', 'phpcms', '', '2019-04-24 16:51:18');
 
 -- ----------------------------
 -- Table structure for zy_logistics_company
@@ -4708,12 +4894,12 @@ CREATE TABLE `zy_member` (
   UNIQUE KEY `username` (`username`),
   KEY `email` (`email`(20)),
   KEY `phpssouid` (`phpssouid`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of zy_member
 -- ----------------------------
-INSERT INTO `zy_member` VALUES ('1', '1', 'ldFuFM2f', 'ab50224008d1968857a51f003003e1dd', 'd4QH7t', 0xE7B3BBE7BB9FE5BA97E993BA, '1553058634', '1554348667', '192.168.1.47', '192.168.1.4', '21', 'zhuoyuan@300c.cn', '18', '0', '0.00', '0', '10', '0', '0', '0', '0', '1', '', '', '15067614058', 'ab50224008d1968857a51f003003e1dd', 'd4QH7t', 'statics/images/member/nophoto.gif', '保密', '', '', '', '', '', '', '', '系统自营店铺', '1');
+INSERT INTO `zy_member` VALUES ('2', '2', 'EvzzipEd', 'd34e5fc52bbd595dcf7efec6675371e1', 'bmTnbB', 0x7A79303031, '1556001445', '0', '', '', '0', '1@emai.com', '2', '0', '0.00', '0', '10', '0', '0', '0', '0', '1', '', '', '18668322793', '', '', 'statics/images/member/nophoto.gif', '保密', '', '', '', '', '', '', '', '', '0');
 
 -- ----------------------------
 -- Table structure for zy_member_collect
@@ -4744,12 +4930,12 @@ CREATE TABLE `zy_member_detail` (
   `userid` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `birthday` char(80) DEFAULT NULL COMMENT '生日',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of zy_member_detail
 -- ----------------------------
-INSERT INTO `zy_member_detail` VALUES ('1', '1', '2019-03-20');
+INSERT INTO `zy_member_detail` VALUES ('2', '2', null);
 
 -- ----------------------------
 -- Table structure for zy_member_footprint
@@ -5736,52 +5922,6 @@ CREATE TABLE `zy_order` (
 -- ----------------------------
 -- Records of zy_order
 -- ----------------------------
-INSERT INTO `zy_order` VALUES ('62', '1552268276', '0', '12', '0', '7', '3', '4', '1', '2147483647', 'CY', '318000', '浙江省', '台州市', '椒江区', '君悦大厦', '1552267649', '0', '0', '', '', '', '0', '0', '4400.00', '0', '', '', '122112', '212121', '0');
-INSERT INTO `zy_order` VALUES ('61', '1552267785', '0', '1', '0', '7', '3', '4', '1', '2147483647', 'CY', '318000', '浙江省', '台州市', '椒江区', '君悦大厦', '1552267649', '0', '0', '', '', '', '0', '0', '7450.00', '0', '', '', '323232', '323232', '0');
-INSERT INTO `zy_order` VALUES ('63', '1552372271', '0', '1', '0', '7', '4', '4', '25', '2147483647', '啊实打', '　', '北京市', '北京市', '东城区', '让他好人好事电吹风', '1552372062', '0', '0', '', '', '', '0', '0', '369.00', '0', '', '', '34433434', '343434', '0');
-INSERT INTO `zy_order` VALUES ('64', '1552372951', '0', '1', '0', '7', '4', '4', '25', '2147483647', '魏小杰', '　', '北京市', '北京市', '东城区', '朝阳区1号', '1552372280', '0', '0', '', '', '', '0', '0', '666.00', '0', '', '', '212121', '21211212', '0');
-INSERT INTO `zy_order` VALUES ('65', '1552372770', '0', '1', '0', '1', '0', '0', '1', '2147483647', '魏小杰', '　', '北京市', '北京市', '东城区', '朝阳区1号', '1552372586', '0', '0', '', '', '', '0', '0', '666.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('66', '1552373529', '0', '1', '0', '7', '4', '4', '25', '2147483647', '魏小杰', '　', '北京市', '北京市', '东城区', '朝阳区1号', '1552372591', '0', '0', '', '', '', '0', '0', '666.00', '0', '', '', '122121', '212121', '0');
-INSERT INTO `zy_order` VALUES ('67', '1552373228', '0', '1', '0', '7', '4', '4', '25', '2147483647', '魏小杰', '　', '北京市', '北京市', '东城区', '朝阳区1号', '1552372601', '0', '0', '', '', '', '0', '0', '666.00', '0', '', '', '212112', '32323223', '0');
-INSERT INTO `zy_order` VALUES ('68', '1552373158', '0', '1', '0', '6', '0', '0', '25', '2147483647', '魏小杰', '　', '北京市', '北京市', '东城区', '朝阳区1号', '1552372605', '0', '0', '', '', '', '0', '0', '666.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('69', '1552372793', '0', '1', '0', '3', '0', '0', '25', '2147483647', '魏小杰', '　', '北京市', '北京市', '东城区', '朝阳区1号', '1552372614', '0', '1552894666', '韵达快递', 'YDKY', '3833863021764', '0', '0', '666.00', '0', '', '提醒发货', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('70', '1552374596', '0', '1', '0', '6', '0', '0', '25', '2147483647', '日访问权威', '　', '北京市', '北京市', '海淀区', '强无敌群翁群翁群翁权威', '1552373626', '0', '0', '', '', '', '0', '0', '744.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('71', '1552373941', '0', '12', '0', '6', '0', '0', '25', '2147483647', '日访问权威', '　', '北京市', '北京市', '海淀区', '强无敌群翁群翁群翁权威', '1552373626', '0', '0', '', '', '', '0', '0', '4400.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('72', '1552375100', '0', '1', '0', '6', '0', '0', '25', '2147483647', '啊实打', '　', '北京市', '北京市', '东城区', '让他好人好事电吹风', '1552374138', '0', '0', '韵达快递', 'YDKY', '3833863021764', '0', '0', '3760.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('73', '1552374760', '0', '1', '0', '3', '0', '0', '25', '2147483647', '啊实打', '　', '北京市', '北京市', '东城区', '让他好人好事电吹风', '1552374423', '0', '0', '韵达快递', 'YDKY', '3833863021764', '0', '0', '7011.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('74', '1552375147', '0', '1', '0', '6', '0', '0', '25', '2147483647', '日访问权威', '　', '北京市', '北京市', '海淀区', '强无敌群翁群翁群翁权威', '1552374594', '0', '0', '韵达快递', 'YDKY', '3833863021764', '0', '0', '370.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('75', '1552375277', '0', '1', '0', '6', '0', '0', '25', '2147483647', '啊实打', '　', '北京市', '北京市', '东城区', '让他好人好事电吹风', '1552374680', '0', '0', '', '', '', '0', '0', '372.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('76', '1552375709', '0', '1', '0', '6', '0', '0', '25', '2147483647', '啊实打', '　', '北京市', '北京市', '东城区', '让他好人好事电吹风', '1552374808', '0', '0', '', '', '', '0', '0', '371.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('77', '1552375685', '0', '1', '0', '6', '0', '0', '25', '2147483647', '啊实打', '　', '北京市', '北京市', '东城区', '让他好人好事电吹风', '1552374953', '0', '0', '', '', '', '0', '0', '748.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('78', '1552375853', '0', '1', '0', '1', '0', '0', '1', '2147483647', '日访问权威', '　', '北京市', '北京市', '海淀区', '强无敌群翁群翁群翁权威', '1552375111', '0', '0', '', '', '', '0', '0', '373.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('79', '1552376172', '0', '1', '0', '7', '0', '0', '1', '2147483647', '啊实打', '　', '北京市', '北京市', '东城区', '让他好人好事电吹风', '1552375199', '0', '0', '', '', '', '0', '0', '376.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('80', '1552376062', '0', '1', '0', '1', '0', '0', '1', '2147483647', 'ASDSD ', '　', '北京市', '北京市', '东城区', 'asdasd asdas d', '1552375424', '0', '0', '', '', '', '0', '0', '377.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('81', '1552375696', '0', '1', '0', '7', '0', '0', '1', '2147483647', '日访问权威', '　', '北京市', '北京市', '海淀区', '强无敌群翁群翁群翁权威', '1552375559', '0', '0', '', '', '', '0', '0', '375.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('82', '1552376521', '0', '1', '0', '7', '7', '4', '1', '2147483647', '日访问权威', '　', '北京市', '北京市', '海淀区', '强无敌群翁群翁群翁权威', '1552375861', '0', '0', '', '', '', '0', '0', '370.00', '0', '', '', '', '', '0');
-INSERT INTO `zy_order` VALUES ('83', '1552376893', '0', '1', '0', '4', '0', '0', '1', '2147483647', '日访问权威', '　', '北京市', '北京市', '海淀区', '强无敌群翁群翁群翁权威', '1552375901', '0', '0', '', '', '', '0', '0', '372.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('84', '1552376910', '0', '1', '0', '4', '0', '0', '1', '2147483647', '日访问权威', '　', '北京市', '北京市', '海淀区', '强无敌群翁群翁群翁权威', '1552376353', '0', '0', '', '', '', '0', '0', '373.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('85', '1552376602', '0', '1', '0', '4', '0', '0', '1', '2147483647', '啊实打', '　', '北京市', '北京市', '东城区', '让他好人好事电吹风', '1552376477', '0', '0', '', '', '', '0', '0', '377.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('86', '1552377140', '0', '1', '0', '4', '0', '0', '1', '2147483647', '啊实打', '　', '北京市', '北京市', '东城区', '让他好人好事电吹风', '1552376698', '0', '1552558820', '申通快递', 'STO', '804252521075355716', '0', '0', '750.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('87', '1552377754', '0', '1', '0', '7', '2', '4', '1', '2147483647', '日访问权威', '　', '北京市', '北京市', '海淀区', '强无敌群翁群翁群翁权威', '1552376759', '0', '0', '', '', '', '0', '0', '370.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('88', '1552378186', '0', '1', '0', '7', '2', '4', '1', '2147483647', '日访问权威', '　', '北京市', '北京市', '海淀区', '强无敌群翁群翁群翁权威', '1552377829', '0', '0', '', '', '', '0', '0', '1873.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('89', '1552378710', '0', '1', '0', '7', '2', '4', '1', '2147483647', '日访问权威', '　', '北京市', '北京市', '海淀区', '强无敌群翁群翁群翁权威', '1552377878', '0', '0', '', '', '', '0', '0', '1119.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('90', '1552560404', '0', '1', '0', '4', '0', '0', '1', '2147483647', 'ASDSD ', '　', '北京市', '北京市', '东城区', 'asdasd asdas d', '1552559968', '0', '1552560012', '中通快递', 'ZTO', '804252521075355716', '0', '0', '89.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('91', '1552560757', '0', '1', '0', '7', '2', '4', '1', '2147483647', '日访问权威', '　', '北京市', '北京市', '海淀区', '强无敌群翁群翁群翁权威', '1552560119', '0', '0', '', '', '', '0', '0', '178.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('92', '1552630109', '0', '1', '0', '1', '0', '0', '1', '2147483647', '日访问权威', '　', '北京市', '北京市', '海淀区', '强无敌群翁群翁群翁权威', '1552629193', '0', '0', '', '', '', '0', '0', '693.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('93', '1552629814', '0', '1', '0', '7', '2', '4', '1', '2147483647', '日访问权威', '　', '北京市', '北京市', '海淀区', '强无敌群翁群翁群翁权威', '1552629253', '0', '0', '', '', '', '0', '0', '89.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('94', '1552629579', '0', '1', '0', '4', '0', '0', '1', '2147483647', '日访问权威', '　', '北京市', '北京市', '海淀区', '强无敌群翁群翁群翁权威', '1552629323', '0', '1552708423', '中通快递', 'ZTO', '541654898797654165', '0', '0', '1124.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('95', '1552708639', '0', '1', '0', '7', '2', '4', '1', '2147483647', '日访问权威', '　', '北京市', '北京市', '海淀区', '强无敌群翁群翁群翁权威', '1552708313', '0', '0', '', '', '', '0', '0', '705.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('96', '1552721268', '0', '1', '0', '4', '0', '0', '1', '2147483647', '日访问权威', '　', '北京市', '北京市', '海淀区', '强无敌群翁群翁群翁权威', '1552720467', '0', '1552720492', '申通快递', 'STO', '465464546546546', '0', '0', '178.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('97', '1552727101', '0', '1', '0', '6', '0', '0', '1', '2147483647', '日访问权威', '　', '北京市', '北京市', '海淀区', '强无敌群翁群翁群翁权威', '1552726378', '0', '0', '', '', '', '0', '0', '9.00', '0', '', '', '0', '', '0');
-INSERT INTO `zy_order` VALUES ('98', '1552891866', '0', '1', '0', '2', '0', '0', '1', '2147483647', 'CBA', '　', '浙江省', '台州市', '椒江区', '84646464', '1552891090', '0', '0', '', '', '', '0', '0', '77.00', '0', '', '提醒发货', '', '', '');
-INSERT INTO `zy_order` VALUES ('99', '1552892769', '0', '1', '0', '2', '0', '0', '1', '2147483647', '日访问权威', '　', '北京市', '北京市', '海淀区', '强无敌群翁群翁群翁权威', '1552892111', '0', '0', '', '', '', '0', '0', '6326.00', '0', '', '', '', '', '');
-INSERT INTO `zy_order` VALUES ('100', '1552897625', '0', '1', '0', '2', '0', '0', '1', '2147483647', '日访问权威', '　', '北京市', '北京市', '海淀区', '强无敌群翁群翁群翁权威', '1552897246', '0', '0', '', '', '', '0', '0', '89.00', '0', '', '', '', '', '');
-INSERT INTO `zy_order` VALUES ('101', '1552897648', '0', '1', '0', '2', '0', '0', '1', '2147483647', '日访问权威', '　', '北京市', '北京市', '海淀区', '强无敌群翁群翁群翁权威', '1552897445', '0', '0', '', '', '', '0', '0', '11349.00', '0', '', '', '', '', '');
-INSERT INTO `zy_order` VALUES ('102', '1552898236', '0', '1', '0', '3', '0', '0', '1', '2147483647', 'CBA', '　', '浙江省', '台州市', '椒江区', '84646464', '1552897500', '0', '1553053717', '申通快递', 'STO', 'asdas dasdasd ', '0', '0', '12.00', '0', '', '', '', '', '');
-INSERT INTO `zy_order` VALUES ('103', '1552984220', '0', '1', '0', '1', '0', '0', '27', '2147483647', '魏小杰', '　', '北京市', '北京市', '东城区', '朝阳区1号', '1552983679', '0', '0', '', '', '', '0', '0', '3333.00', '0', '', '', '', '', '');
-INSERT INTO `zy_order` VALUES ('104', '1552984688', '0', '1', '0', '1', '0', '0', '1', '2147483647', '客流量路口', '　', '北京市', '北京市', '宣武区', '4555556', '1552983812', '0', '0', '', '', '', '0', '0', '356.00', '0', '', '', '', '', '');
-INSERT INTO `zy_order` VALUES ('105', '1552985505', '0', '1', '0', '1', '0', '0', '27', '2147483647', '魏小杰', '　', '北京市', '北京市', '东城区', '朝阳区1号', '1552984896', '0', '0', '', '', '', '0', '0', '93.00', '0', '', '', '', '', '');
-INSERT INTO `zy_order` VALUES ('106', '1553053168', '0', '1', '0', '1', '0', '0', '1', '2147483647', '客流量路口', '　', '北京市', '北京市', '宣武区', '4555556', '1553052956', '0', '0', '', '', '', '0', '0', '1332.00', '0', '', '', '', '', '');
 
 -- ----------------------------
 -- Table structure for zy_order_goods
@@ -6262,7 +6402,7 @@ CREATE TABLE `zy_session` (
 -- ----------------------------
 -- Records of zy_session
 -- ----------------------------
-INSERT INTO `zy_session` VALUES ('258f64t91p4dfo17c1mg569c00', '1', '', '1556000431', '1', '0', 'admin', 'index', 'public_session_life', 'code|s:0:\"\";userid|s:1:\"1\";roleid|s:1:\"1\";pc_hash|s:6:\"6XuNFK\";lock_screen|i:0;');
+INSERT INTO `zy_session` VALUES ('j6bc1s2c93c9pucc6k1lrphep0', '1', '', '1556096533', '1', '0', 'admin', 'index', 'public_session_life', 'code|s:0:\"\";userid|s:1:\"1\";roleid|s:1:\"1\";pc_hash|s:6:\"GrIF27\";lock_screen|i:0;');
 
 -- ----------------------------
 -- Table structure for zy_site
@@ -6500,12 +6640,12 @@ CREATE TABLE `zy_sso_members` (
   UNIQUE KEY `username` (`username`),
   KEY `email` (`email`),
   KEY `ucuserid` (`ucuserid`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of zy_sso_members
 -- ----------------------------
-INSERT INTO `zy_sso_members` VALUES ('1', 'ldFuFM2f', 'ab50224008d1968857a51f003003e1dd', 'd4QH7t', 'yyy@300c.cn', '192.168.1.47', '1553058634', '', '1553058634', 'phpcmsv9', 'app', '0', '0');
+INSERT INTO `zy_sso_members` VALUES ('2', 'EvzzipEd', 'd34e5fc52bbd595dcf7efec6675371e1', 'bmTnbB', '1@emai.com', '', '1556001445', '', '1556001445', 'phpcmsv9', 'app', '0', '0');
 
 -- ----------------------------
 -- Table structure for zy_sso_messagequeue
@@ -6522,11 +6662,12 @@ CREATE TABLE `zy_sso_messagequeue` (
   PRIMARY KEY (`id`),
   KEY `dateline` (`dateline`),
   KEY `succeed` (`succeed`,`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of zy_sso_messagequeue
 -- ----------------------------
+INSERT INTO `zy_sso_messagequeue` VALUES ('1', 'member_delete', '0', '1', '{\"uids\":{\"0\":\"1\"},\"action\":\"member_delete\"}', '1556002439', '{\"1\":1}');
 
 -- ----------------------------
 -- Table structure for zy_sso_session
