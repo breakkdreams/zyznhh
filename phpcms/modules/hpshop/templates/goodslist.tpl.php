@@ -59,7 +59,7 @@ a:hover{ text-decoration: none; }
             <th ><?php echo '本店价'?></th>
             <th ><?php echo '上架'?></th>
             <th ><?php echo '栏目'?></th>
-            <th ><?php echo '品牌'?></th>
+            <th ><?php echo '积分价'?></th>
             <th ><?php echo '类型'?></th>
             <th ><?php echo '添加时间'?></th>
 
@@ -93,7 +93,7 @@ if(is_array($infos)){
 		
 	</td>
     <td  align="center"><?php echo $cinfo[$info['catid']]?></td>
-    <td  align="center"><?php echo $binfo[$info['brand_id']]?></td>
+    <td  align="center"><?php echo $info['score_price']?></td>
     <td  align="center"><?php echo $tinfo[$info['type_id']]?></td>
     <td  align="center"><?php echo date('Y-m-d H:i:s',$info['addtime']) ;?></td>
 

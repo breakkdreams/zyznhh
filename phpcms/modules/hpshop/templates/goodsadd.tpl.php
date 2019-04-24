@@ -192,14 +192,14 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
 				</tr>
 
 				<tr>
-					<th>推荐位</th>  
+					<th>推荐位</th>
 					<td>
-						<?php 
-							if(is_array($pinfo)){	
+						<?php
+							if(is_array($pinfo)){
 								foreach($pinfo as $p){
-						?>  
+						?>
 						    <input name="pos[]" type="checkbox" value="<?php echo $p['id'] ;?>" id="checkbox_<?php echo $p['id'] ;?>" class="chk_1" /><label for="checkbox_<?php echo $p['id'] ;?>"><span><?php echo $p['posname'] ;?></span></label>
-					    <?php 
+					    <?php
 								}
 							}
 						?>
@@ -208,15 +208,19 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
 
 				<tr>
 					<th width="125">市场价</th>  
-					<td><input type="text" name="mprice" class="input-text" required="required"></input></td>
+					<td><input type="text" name="mprice" class="input-text" required="required"/></td>
 				</tr>
 				<tr>
 					<th width="125">本店价</th>  
-					<td><input type="text" name="sprice" class="input-text" required="required"></input></td>
+					<td><input type="text" name="sprice" class="input-text" required="required"/></td>
 				</tr>
+                <tr>
+                    <th width="125">积分价</th>
+                    <td><input type="text" name="scoreprice" class="input-text" required="required"/></td>
+                </tr>
 				<tr>
 					<th width="125">总库存</th>  
-					<td><input type="text" name="stock" class="input-text" value="100"></input><span> （若填写了商品规格则可不填）</span></td>
+					<td><input type="text" name="stock" class="input-text" value="100"/><span> （若填写了商品规格则可不填）</span></td>
 				</tr>
 
 				<tr>

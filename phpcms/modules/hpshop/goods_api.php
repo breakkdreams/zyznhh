@@ -41,6 +41,126 @@ class goods_api{
 		
 	}
 
+    /**
+     * 首页
+     * param:rid(首页1),
+     */
+    public function index_page(){
+        $rid = $_POST['rid'];//推荐位ID，实际参考后台推荐位内容
+        if ( $rid == null ) {
+            $result = [
+                'status' => 'error',
+                'code' => 0,
+                'message' => '参数错误！',
+            ];
+            exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+        }
+        $where = 'a.id = b.goodsid and a.isok = 1 and a.on_sale = 1 and b.pos_id = '.$rid;
+        $sql ='SELECT a.id,a.goods_name,a.thumb,a.summary,a.market_price,a.shop_price FROM zy_goods a,zy_goodspositem b WHERE '.$where.' ORDER BY a.addtime DESC';
+        $page = $_POST['page'] ? $_POST['page'] : '1';
+        $goods_list = $this->get_db->multi_listinfo($sql,$page,$pagesize = 10);
+        //banner图
+
+        //头条
+
+        $result = [
+            'status'=>'success',
+            'code'=>200,
+            'message'=>'成功',
+            'goods_list'=>$goods_list,
+        ];
+        exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+    }
+
+    /**
+     *商品列表
+     * param:uid(用户id),is_search(搜索传1),sercon(搜索的标题),is_sort(销量1 价格2 新品3),sort(排序1.asc 2.desc),catid(分类id),page(分页页数)
+     */
+    public function goods_list_page(){
+        $_userid = param::get_cookie('_userid');
+        $userid = $_POST['uid'];
+        if($_userid){
+            $uid = $_userid;
+        }else{
+            $uid = $userid;
+        }
+        $is_search = $_POST['is_search'];//1是搜索
+        $where = ' isok = 1 and on_sale = 1 ';
+        if($is_search == 1){
+            if (!empty($_POST['sercon'])) {
+                $where .= " and goods_name like '%".$_POST['sercon']."%' ";
+                if ( !empty($uid) ) {
+                    $his = $this->goods_sh_db->get_one(['userid'=>$uid]);
+                    if ( count($his) == 0 ) {
+                        $hisarr = [];
+                        $hisarr[] = $_POST['sercon'];
+                        $hiscon = array2string($hisarr);
+                        $this->goods_sh_db->insert(['userid'=>$uid,'searchHistory'=>$hiscon]);
+                    } else {
+                        $hisarr = string2array($his['searchHistory']);
+                        foreach ($hisarr as $k => $v) {
+                            if ( $_POST['sercon'] == $v ) {
+                                unset($hisarr[$k]);
+                                array_values($hisarr);
+                                break;
+                            }
+                        }
+                        if ( count($hisarr) < 10 ) {
+                            //$hisarr[] = $_POST['sercon'];
+                            array_unshift($hisarr,$_POST['sercon']);
+                        } else {
+                            unset($hisarr[9]);
+                            array_unshift($hisarr,$_POST['sercon']);
+                        }
+                        $hiscon = array2string($hisarr);
+                        $this->goods_sh_db->update(['searchHistory'=>$hiscon],['userid'=>$uid]);
+                    }
+                }
+            }
+        }
+
+        $rid = $_POST['catid'];
+        if ( $rid != null ) {
+            $where .=' and catid in ('.$rid.')';
+        }
+
+        $order =' id desc ';
+        $is_sort = $_POST['is_sort'];//销量1 价格2 新品3
+        $sort = $_POST['sort'];//排序(1.asc 2.desc)
+        if($is_sort == 1){
+            $order =' salesnum '.$sort;
+        }else if($is_sort == 2){
+            $order =' shop_price '.$sort;
+        }else if($is_sort == 3){
+            $order =' addtime '.$sort;
+        }
+
+        $sql = 'SELECT id,goods_name,thumb,summary,market_price,shop_price,salesnum,score_price FROM zy_goods WHERE '.$where.'ORDER BY'.$order;
+        $page = $_POST['page'] ? $_POST['page'] : '1';
+        $info = $this->get_db->multi_listinfo($sql,$page,$pagesize = 10);
+
+        $sqls = 'SELECT COUNT(*) as num FROM zy_goods WHERE '.$where.'ORDER BY'.$order;
+        $res = $this->goods_db->query($sqls);
+        $page = $this->goods_db->fetch_array($res);
+        $totalnum = $page[0]['num'];
+        $totalpage = ceil($totalnum/10);
+
+        $result = [
+            'status' => 'success',
+            'code' => 1,
+            'message' => 'OK',
+            'data' => $info,
+            'page' => [
+                'pagesize'=>10,
+                'totalpage'=>$totalpage,
+                'totalnum' => $totalnum
+            ]
+        ];
+        $jg = json_encode($result,JSON_UNESCAPED_UNICODE);
+        $jg = stripslashes($jg);
+        exit($jg);
+    }
+
 
 	/**
      *推荐商品
@@ -86,6 +206,8 @@ class goods_api{
 
 	/**
      *分类栏目商品
+     * GET
+     * param:catid(分类id)
      */
 	public function catgoods(){
 		$rid = $_GET['catid'];
@@ -109,10 +231,10 @@ class goods_api{
 
 		$where ='catid in ('.$did.')';
 		$order =' id desc ';
-		$sql = 'SELECT id,goods_name,thumb,summary,market_price,shop_price FROM phpcms_goods WHERE '.$where.'ORDER BY'.$order;
+		$sql = 'SELECT id,goods_name,thumb,summary,market_price,shop_price FROM zy_goods WHERE '.$where.'ORDER BY'.$order;
         $page = $_GET['page'] ? $_GET['page'] : '1';
         $info = $this->get_db->multi_listinfo($sql,$page,$pagesize = 10);
-		$sqls = 'SELECT COUNT(*) as num FROM phpcms_goods WHERE '.$where.'ORDER BY'.$order;
+		$sqls = 'SELECT COUNT(*) as num FROM zy_goods WHERE '.$where.'ORDER BY'.$order;
         $res = $this->goods_db->query($sqls);
         $page = $this->goods_db->fetch_array($res);
 		$totalnum = $page[0]['num'];
@@ -139,6 +261,7 @@ class goods_api{
 
 	/**
      *分类栏目
+     * GET
      */
 	public function allcat(){
         require('classes/PHPTree.class.php');//加载树形结构类
@@ -160,13 +283,17 @@ class goods_api{
         $content = preg_replace("/cate_name/","name",$content);
         $content = preg_replace("/cate_img/","img",$content);
 
-        echo $content;
+        exit($content);
     }
+
+
     
 
 
 	/**
      *商品搜索
+     * POST
+     * param:sercon(商品名称),uid(用户id)
      */
 	public function sergoods(){
 		$_userid = param::get_cookie('_userid');
@@ -211,12 +338,12 @@ class goods_api{
 		}
 
 		$order =' id desc ';
-		$sql = 'SELECT id,goods_name,thumb,summary,market_price,shop_price FROM phpcms_goods WHERE '.$where.'ORDER BY'.$order;
+		$sql = 'SELECT id,goods_name,thumb,summary,market_price,shop_price FROM zy_goods WHERE '.$where.'ORDER BY'.$order;
         $page = $_GET['page'] ? $_GET['page'] : '1';
         $info = $this->get_db->multi_listinfo($sql,$page,$pagesize = 10);
 		//$pages = $this->goods_db->pages;
 		
-        $sqls = 'SELECT COUNT(*) as num FROM phpcms_goods WHERE '.$where.'ORDER BY'.$order;
+        $sqls = 'SELECT COUNT(*) as num FROM zy_goods WHERE '.$where.'ORDER BY'.$order;
         $res = $this->goods_db->query($sqls);
         $page = $this->goods_db->fetch_array($res);
 		$totalnum = $page[0]['num'];
@@ -242,6 +369,7 @@ class goods_api{
 
 	/**
      *获取用户商品搜索记录
+     * param:uid(用户id)
      */
 	public function goods_sh(){
 		
