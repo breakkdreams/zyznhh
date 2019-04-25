@@ -18,7 +18,7 @@ class zymemberApi{
 		$this->member_collect_db = pc_base::load_model('member_collect_model');
 		$this->member_footprint_db = pc_base::load_model('member_footprint_model');
 	}
-
+ 
 	/**
 	* 会员注册协议
 	* @return [json] [json数组]
