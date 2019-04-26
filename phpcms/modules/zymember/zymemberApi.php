@@ -472,6 +472,40 @@ class zymemberApi{
 
 	}
 
+
+	/**
+	* 头像上传_ajax
+	*/
+	public function portrait_ajax() {
+		$userid = $_POST['userid'];	//用户id
+		$member=$this->member_db->get_one(array('userid'=>$userid));
+		$str=stripslashes($_POST['imgurl1']);
+		if($member){
+			$data= array(
+				'headimgurl'=>$str,
+			);
+			$state = $this->member_db->update($data,array('userid'=>$userid));
+
+			$result = [
+				'status'=>'success',
+				'code'=>200,
+				'message'=>'修改成功',
+				'data'=>[
+					'userid'=>$member['userid'],
+				]
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+		}else{
+			$result = [
+					'status'=>'error',
+					'code'=>'-101',
+					'message'=>'未找到用户',
+				];
+				exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+		}
+		
+	}
+
 	/**
 	* 个人资料_修改基本会员资料
 	* @status [状态] -1用户id不能为空/-2修改数据不能为空/-3账号不存在/-4帐号已锁定,无法操作/-11用户昵称格式错误
@@ -1532,247 +1566,70 @@ class zymemberApi{
 	}
 
 
-
 	/**
-	 * 微信APP_快捷登录
-	 * @status [状态] -1数据不能为空/-2请开启微信登录模式,填写配置/-3开启微信开放平台,填写配置/-4帐号已锁定,无法操作
-	 * @param  [type] $sex [*微信性别]
-	 * @param  [type] $nickname [*微信昵称]
-	 * @param  [type] $unionid [*unionid]
-	 * @param  [type] $openid [*openid]
-	 * @param  [type] $headimgurl [*微信头像]
-	 * @return [json] [json数组]
+	 * 公共模块_会员详细信息
+	 * @param  [type] $userid [*用户id]
+	 * @param  [type] $field [需要查询的字段，已逗号隔开]
+	 * @return [json]         [数据组]
 	 */
-	public function public_wechatapp_login()
+	public function pub_memberinfo($userid=NULL,$field)
 	{
-		
-		$rs = array();
-		$rs['sex'] = $_POST['sex'];
-		$rs['nickname'] = $_POST['nickname'];
-		$rs['unionid'] = $_POST['unionid'];
-		$rs['openid'] = $_POST['openid'];
-		$rs['headimgurl'] = $_POST['headimgurl'];
-
-		//微信密钥
-		$this->_wechatapp_appid = pc_base::load_config('zysystem', 'wechatapp_appid');	//微信PE appid
-		$this->_wechatapp_appsecret = pc_base::load_config('zysystem', 'wechatapp_appsecret');	//微信PE appsecret
-		$this->_wechat_kaifang = pc_base::load_config('zysystem', 'wechat_kaifang');	//是否开启微信开放平台（0开启、1未开启）
-		$this->_wechat_off = pc_base::load_config('zysystem', 'wechat_off');	//是否开启微信登录（0开启、1未开启）
-
-
+		if($_POST['userid']){
+			$field = $_POST['field'] ? $_POST['field'] : '';
+			$userid = $_POST['userid'];
+		}else{
+			$field = $_GET['field'] ? $_GET['field'] : '';
+			$userid = $_GET['userid'];
+		}
 		//==================	操作失败-验证 START
-			//数据不能为空
-			if (!$rs['nickname'] ||!$rs['unionid'] || !$rs['openid'] || !$rs['headimgurl']) {
-				$result = [
-					'status'=>'error',
-					'code'=>-1,
-					'message'=>'数据不能为空',
-				];
-				exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-			}
-			//请开启微信登录模式,填写配置
-			if ($this->_wechat_off==1) {
-				$result = [
-					'status'=>'error',
-					'code'=>-2,
-					'message'=>'请开启微信登录模式,填写配置',
-				];
-				exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-			}
-			//请开启微信登录模式,填写配置
-			if ($this->_wechat_kaifang==1) {
-				$result = [
-					'status'=>'error',
-					'code'=>-3,
-					'message'=>'开启微信开放平台,填写配置',
-				];
-				exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-			}
-
-		//==================	操作失败-验证 END
-
-
-		
-		//==================	新建微信登录临时表，判断是否已经有手机号码 START
-		//根据微信号来查用户信息。看是否存在这个用户（判断是否开启了微信开放平台进行电脑微信进行绑定）
-        //如果不存在，就把当前用户的信息,进行注册，在登录
-		//如果存在，那就直接登录
-		$memberinfo = $this->member_db->get_one(array('wechat_unionid'=>$rs['unionid']));
-
-		//帐号已锁定,无法操作
-		if($memberinfo['islock']==1) {
+		if(!$userid){
 			$result = [
 				'status'=>'error',
-				'code'=>-4,
-				'message'=>'帐号已锁定,无法操作',	//帐号已锁定,无法操作
+				'code'=>-1,
+				'message'=>'请输入用户id',
+				
 			];
 			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
 		}
 
-
-		if ($memberinfo) {	//登陆
+		$memberinfo = $this->members_db->get_one(['userid'=>$userid]);
+		if(!$memberinfo){
 			$result = [
-				'status'=>'success',
-				'code'=>200,
-				'message'=>'登录成功',
-				'data'=>[
-					'userid'=>$memberinfo['userid'],
-					'groupid'=>$memberinfo['groupid']
-				]
-			];
-			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-		}else{			//注册
-
-			//==================	操作成功-注册数据 START
-				if($rs['sex']==0 ||  $rs['sex']==null){
-					$rs['sex'] = '保密';
-				}elseif($rs['sex']==1){
-					$rs['sex'] = '男';
-				}elseif($rs['sex']==2){
-					$rs['sex'] = '女';
-				}
-				/* $temporary_name = str_replace(' ','',$rs['nickname']);
-				if(empty($temporary_name)){
-					$rs['nickname']='???';
-				} */
-
-				//获取会员基本设置的配置
-				$member_setting = $this->module_db->get_one(array('module'=>'member'), 'setting');
-				$member_setting = string2array($member_setting['setting']);
-				$password = 123456;
-				$mobile = '';
-
-				$userinfo = array();
-				//用户基本信息
-				$userinfo['username'] = create_randomstr(8);
-				$userinfo['password'] = $password;
-				$userinfo['encrypt'] = create_randomstr(6);
-				$userinfo['regdate'] = time();
-				$userinfo['regip'] = ip();
-				$userinfo['email'] = time().'@300c.cn';
-				$userinfo['groupid'] = 2;
-				$userinfo['amount'] = 0;
-				$userinfo['point'] = $member_setting['defualtpoint'];
-				$userinfo['modelid'] = 10;
-				//$userinfo['islock'] = $_POST['info']['islock']==1 ? 0 : 1;
-				//$userinfo['vip'] = $_POST['info']['vip']==1 ? 1 : 0;
-				//$userinfo['overduedate'] = strtotime($_POST['info']['overduedate']);
-				$userinfo['mobile'] = $mobile;
-
-				$userinfo['headimgurl'] = $rs['headimgurl'];
-				$userinfo['sex'] = $rs['sex'];
-				$userinfo['nickname'] = $rs['nickname'];
-
-				//记录微信信息
-				$userinfo['wechat_unionid'] = $rs['unionid'];
-				$userinfo['wechat_name'] = $rs['nickname'];
-				$userinfo['wechat_headimg'] = $rs['headimgurl'];
-				$userinfo['wechat_sex'] = $rs['sex'];
-				$userinfo['wechatapp_openid'] = $rs['openid'];
-				//记录微信信息
-
+				'status'=>'error',
+				'code'=>-2,
+				'message'=>'用户不存在',
 				
-				//传入phpsso为明文密码，加密后存入phpcms_v9
-				$password = $userinfo['password'];
-				$userinfo['password'] = password($userinfo['password'], $userinfo['encrypt']);
-
-
-				//主表
-				$userid=$this->member_db->insert($userinfo,true);
-				$this->member_db->update(array('phpssouid'=>$userid),'userid='.$userid);
-				
-				//sso表
-				$sso_members_db = pc_base::load_model('sso_members_model');
-				$data_member_sso = array(
-					'username'=>$userinfo['username'],
-					'password'=>$userinfo['password'],
-					'random'=>$userinfo['encrypt'],
-					'email'=>$userinfo['email'],
-					'regdate'=>$userinfo['regdate'],
-					'lastdate'=>$userinfo['regdate'],
-					'regip'=>$userinfo['regip'],
-					'lastip'=>$userinfo['lastip'],
-					'appname'=>'phpcmsv9',
-					'type'=>'app',
-				);	
-				$sso_members_db->insert($data_member_sso);
-				
-				//附表
-				$data_member_detail = array(
-					'userid'=>$userid,
-				);	
-				$this->member_detail_db->insert($data_member_detail);
-				//==================	操作成功-注册数据 END			
-
-			//登陆
-			$memberinfo = $this->member_db->get_one(array('userid'=>$userid));
-			
-			$result = [
-				'status'=>'success',
-				'code'=>200,
-				'message'=>'登录成功',
-				'data'=>[
-					'userid'=>$memberinfo['userid'],
-					'groupid'=>$memberinfo['groupid']
-				]
 			];
 			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
 		}
+		//==================	操作失败-验证 END
 
-		//==================	新建微信登录临时表，判断是否已经有手机号码 END
-	}
-
-
-	/**
-	 * 店铺会员首页
-	 */
-	public function shop_init()
-	{
-
-	}
-
-	/**
-	 * 店铺会员首页
-	 */
-	public function apptoweb_login()
-	{
-		$userid = $_POST['userid'];
-		//用手机号码查出用户账号
-		$memberinfo = $this->member_db->get_one(array('userid'=>$userid));
-
-			//帐号密码类型不能为空
-			if (!$memberinfo) {
-				$result = [
-					'status'=>'error',
-					'code'=>-1,
-					'message'=>'用户不存在',
-					
-				];
-				exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+		//==================	操作成功-查询数据 START
+		//如果有字段数组传值过来，那么就只显示传值过来的字段值(利用逗号进行打散操作)
+		//如果没有字段数组传值过来，那么就显示当前用户的全部信息
+		if($field){
+			$field = explode(",", $field);		//打散成数组，到时候进行重新组装
+			foreach ($field as $key => $value) {
+				$data[$value] = $memberinfo[$value];
 			}
-
-
-			$cookietime = SYS_TIME + 7200;	//系统时间+两个小时
-			$phpcms_auth = sys_auth($memberinfo['userid']."\t".$memberinfo['password'], 'ENCODE', get_auth_key('login'));
-			param::set_cookie('auth', $phpcms_auth, $cookietime);
-			param::set_cookie('_userid', $memberinfo['userid'], $cookietime);
-			param::set_cookie('_username', $memberinfo['username'], $cookietime);
-			param::set_cookie('_nickname', $memberinfo['nickname'], $cookietime);
-			param::set_cookie('_groupid', $memberinfo['groupid'], $cookietime);
-			param::set_cookie('cookietime', $_cookietime, $cookietime);
-
-
-			//帐号密码类型不能为空
-			if ($memberinfo) {
-				$result = [
-					'status'=>'success',
-					'code'=>200,
-					'message'=>'操作成功',
-				];
-				exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-			}
+		}else{
+			$data = $memberinfo;
+		}
+		//加上域名
+		if($data['headimgurl']=='statics/images/member/nophoto.gif'){
+			$data['headimgurl'] = APP_PATH.'statics/images/member/nophoto.gif';
+		}		
+		$result = [
+			'status'=>'success',
+			'code'=>200,
+			'message'=>'操作成功',
+			'data'=>$data
+		];
+		exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+		//==================	操作成功-查询数据 END
 	}
 
+	
 //====================================	私有验证函数 START
 
 	/*
@@ -1892,479 +1749,6 @@ class zymemberApi{
 		//==================	操作失败-验证 END
 	}
 //====================================	私有验证函数 END
-
-
-
-	public function ceshi(){
-
-		$result = [
-			'status'=>'success',
-			'code'=>200,
-			'message'=>'登录成功',
-			'data'=>$_POST
-		];
-		exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-	}
-
-
-
-
-
-
-//====================================	商品收藏 START
-	/**
-	 * 前台——收藏-添加
-	 * @param  [type] $id     [商品id]
-	 * @param  [type] $userid [用户id]
-	 */
-	public function collect_add($id,$userid)
-	{
-		$id = $_POST['id'];	//商品id
-		$_userid = param::get_cookie('_userid');
-		//用户id，APP端必须传
-		//非APP端直接用$_userid
-		if($_userid){
-			$userid = $_userid;
-		}else{
-			$userid = $_POST['userid'];
-		}
-
-		if(!isset($userid))
-		{
-			$result = [
-				'status'=>'error',
-				'code'=>1004,
-				'message'=>'没有登陆',
-				'data'=>'',
-			];
-			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-		}
-		//调用商品接口
-		$commodity_info=@file_get_contents("http://pub.300c.cn/index.php?m=hpshop&c=goods_api&a=goodsinfo&gid=".$id);
-		$cinfo = json_decode($commodity_info,true);
-		$exist = $this->member_collect_db->get_one(array('pid'=>$id,'userid'=>$userid));
-
-		//判断该用户是否收藏改商品
-		$exist_result = $exist['pid'] != $id || $exist['userid'] != $userid;
-
-		if($cinfo['code'] == 1 && $exist_result)
-		{
-			//生成商品链接
-			$url = "http://pub.300c.cn/index.php?m=zymember&c=index&a=collect&gid=".$id;
-		
-			$data = array(
-				'pid'=>$_POST['id'],
-				'catid'=>$cinfo['data']['id'],
-				'url'=>$url,
-				'thumb'=>$cinfo['data']['thumb'],
-				'title'=>$cinfo['data']['goods_name'],
-				'price'=>$cinfo['data']['market_price'],
-				'userid'=>$userid,
-			);
-			$state = $this->member_collect_db->insert($data,true);
-
-			//==================	操作失败-验证 START
-
-			if(0<$state){
-				$result = [
-				'status'=>'success',
-				'code'=>200,
-				'message'=>'收藏成功',
-				'data'=>[
-					'pid'=>$_POST['id'],
-					'catid'=>$cinfo['data']['id'],
-					'url'=>$url,
-					'thumb'=>$cinfo['data']['thumb'],
-					'title'=>$cinfo['data']['goods_name'],
-					'price'=>$cinfo['data']['market_price'],
-					'userid'=>$userid,
-					'id' => $state,
-				]
-			];
-			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-			//==================	操作成功-插入数据 END
-			}else{
-				$result = [
-				'status'=>'error',
-				'code'=>1001,
-				'message'=>'收藏失败',
-				'data'=>'',
-			];
-			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-			//==================	操作失败-插入数据 END
-			}
-		}
-		if($cinfo['code'] == -1){
-			$result = [
-				'status'=>'error',
-				'code'=>1002,
-				'message'=>'该商品不存在',
-				'data'=>'',
-			];
-			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-		}
-		if($exist['pid'] = $id && $exist['userid'] = $userid)
-		{
-			$result = [
-				'status'=>'error',
-				'code'=>1003,
-				'message'=>'该商品已收藏',
-				'data'=>'',
-			];
-			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-		}
-		
-	}
-
-
-	/**
-	 * 前台——收藏-删除
-	 * @param  [type] $id     [商品id]
-	 * @param  [type] $userid [用户id]
-	 */
-	public function collect_del($id,$userid)
-	{
-		$id = $_POST['id'];	//商品id
-		$_userid = param::get_cookie('_userid');
-		//用户id，APP端必须传
-		//非APP端直接用$_userid
-		if($_userid){
-			$userid = $_userid;
-		}else{
-			$userid = $_POST['uid'];
-		}
-
-		if(!isset($userid))
-		{
-			$result = [
-				'status'=>'error',
-				'code'=>1004,
-				'message'=>'没有登陆',
-				'data'=>'',
-			];
-			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-		}
-
-		$info = $this->member_collect_db->get_one(array('pid'=>$id,'userid'=>$userid));
-		if(isset($info))
-		{
-			$state = $this->member_collect_db->delete(array('pid'=>$id,'userid'=>$userid));
-
-			if($state){
-				$result = [
-				'status'=>'success',
-				'code'=>200,
-				'message'=>'删除成功',
-				'data'=>'',
-			];
-			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-			//==================	操作成功-插入数据 END
-			}else{
-				$result = [
-				'status'=>'error',
-				'code'=>1001,
-				'message'=>'删除失败',
-				'data'=>'',
-			];
-			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-			//==================	操作失败-插入数据 END
-		}
-		}else{
-			$result = [
-				'status'=>'error',
-				'code'=>1002,
-				'message'=>'商品,用户 不存在',
-				'data'=>'',
-			];
-			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-			//==================	操作失败-插入数据 END
-		}
-	}
-
-
-	/**
-	 * 前台——收藏-列表
-	 * @param  [type] $userid [用户id]
-	 */
-	public function collect_list($userid)
-	{
-		$_userid = param::get_cookie('_userid');
-		//用户id，APP端必须传
-		//非APP端直接用$_userid
-		if($_userid){
-			$userid = $_userid;
-		}else{
-			$userid = $_POST['uid'];
-		}
-
-		if(!isset($userid))
-		{
-			$result = [
-				'status'=>'error',
-				'code'=>1004,
-				'message'=>'没有登陆',
-				'data'=>'',
-			];
-			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-		}
-
-		$cinfo = $this->member_collect_db->select(array('userid'=>$userid));
-
-		//==================	操作失败-验证 START
-		if($cinfo){
-			$result = [
-			'status'=>'success',
-			'code'=>200,
-			'message'=>'获取成功',
-			'data'=>$cinfo,
-		];
-		exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-		//==================	操作成功-插入数据 END
-		}else{
-			$result = [
-			'status'=>'error',
-			'code'=>1001,
-			'message'=>'获取失败',
-			'data'=>'',
-		];
-		exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-		//==================	操作失败-插入数据 END
-		}
-	}
-
-
-
-//====================================	商品收藏 END
-
-
-
-
-
-
-
-
-//====================================	商品足迹 START
-
-
-	/**
-	 * 前台——足迹-添加
-	 * @status [状态] -103请先登录/-101账号不存在/-102帐号已锁定,无法登录/-1gid参数空或异常/-2商品不存在或已经下架
-	 * @param  [type] $id     [*商品id]
-	 * @param  [type] $userid [*用户id]
-	 * @param  [type] $type [*类型：1web端、2APP端]
-	 */
-	public function footprint_add($id,$userid)
-	{
-		$id = $_POST['id'];	//商品id
-		$type = $_POST['type'] ? $_POST['type'] : 1;	//类型：1web端、2APP端
-		$userid = $type==1 ? param::get_cookie('_userid') : $_POST['userid'];	//用户id
-
-		//用手机号码查出用户账号
-		$memberinfo = $this->member_db->get_one(array('userid'=>$userid));
-
-		//==================	操作失败-验证 START
-			//请先登录
-			if (!$userid) {
-				$this->_return_status(-103);
-			}
-			//账号不存在
-			if (!$memberinfo) {
-				$this->_return_status(-101);
-			}
-			//帐号已锁定,无法登录
-			if($memberinfo['islock']==1) {
-				$this->_return_status(-102);
-			}
-		//==================	操作失败-验证 END
-
-
-		//==================	操作成功-插入数据 START
-		//逻辑
-		//如果当天同样的商品已存在，那么就删除；不然就添加进去。
-
-			//==================	获取其他接口-接口 START
-				$config = $this->zyconfig_db->get_one(array('key'=>'zyshop15'),"url");
-				$curl = [
-					'gid'=>$id,
-				];
-				$shop_data = _crul_get($config['url'],$curl);
-				$shop_data=json_decode($shop_data,true);
-
-				//==================	操作失败-验证 START
-					//gid参数空或异常
-					if ($shop_data['code']==0) {
-						$result = [
-							'status'=>'error',
-							'code'=>-1,
-							'message'=>'gid参数空或异常',
-						];
-					}
-					//商品不存在或已经下架
-					if ($shop_data['code']==-1) {
-						$result = [
-							'status'=>'error',
-							'code'=>-2,
-							'message'=>'商品不存在或已经下架',
-						];
-					}
-				//==================	操作失败-验证 END
-
-			//==================	获取其他接口-接口 END		
-
-
-			$time = time();
-			//删除的是当天的
-			$del_where = "pid = ".$id." AND userid=".$userid;
-			$start_addtime = strtotime(date("Y-m-d 00:00:00"));
-			$end_addtime = strtotime(date("Y-m-d 23:59:59"));
-			$del_where .= " and addtime >= '".$start_addtime."'";
-			$del_where .= " and addtime <= '".$end_addtime."'";
-			$this->member_footprint_db->delete($del_where);
-
-			$footprint_time = strtotime(date('y-m-d 01:00:00',$time));
-
-			$arr = [
-				'pid'=>$shop_data['data']['id'],
-				'catid'=>$shop_data['data']['id'],
-				'url'=>APP_PATH."index.php?m=hpshop&c=index&a=goodsinfo&id=".$shop_data['data']['id'],
-				'thumb'=>$shop_data['data']['thumb'],
-				'title'=>$shop_data['data']['goods_name'],
-				'price'=>$shop_data['data']['market_price'],
-				'userid'=>$memberinfo['userid'],
-				'addtime'=>$time,
-				'footprint_time'=>$footprint_time,
-			];
-
-			$result = $this->member_footprint_db->insert($arr,true);
-
-			$this->_return_status(200);
-
-		//==================	操作成功-插入数据 END		
-		
-	}
-
-
-	/**
-	 * 前台——足迹-列表
-	 * @status [状态] -103请先登录/-101账号不存在/-102帐号已锁定,无法登录
-	 * @param  [type] $userid [*用户id]
-	 * @param  [type] $type [*类型：1web端、2APP端]
-	 */
-	public function footprint_list()
-	{
-		$type = $_POST['type'] ? $_POST['type'] : 1;	//类型：1web端、2APP端
-		$userid = $type==1 ? param::get_cookie('_userid') : $_POST['userid'];	//用户id
-
-
-		//用手机号码查出用户账号
-		$memberinfo = $this->member_db->get_one(array('userid'=>$userid));
-
-		//==================	操作失败-验证 START
-			//请先登录
-			if (!$userid) {
-				$this->_return_status(-103);
-			}
-			//账号不存在
-			if (!$memberinfo) {
-				$this->_return_status(-101);
-			}
-			//帐号已锁定,无法登录
-			if($memberinfo['islock']==1) {
-				$this->_return_status(-102);
-			}
-		//==================	操作失败-验证 END
-
-		//==================	操作成功-显示数据 START
-			//如果日期是一样的，那么就不获取过来
-			//如果是不一样的，那么就获取过来存起来
-
-			$date= strtotime("-1 months",time());		//前个月的时间戳
-			$where = 'userid='.$userid.' AND addtime>='.$date;
-			$order = 'id DESC';
-			$info = $this->member_footprint_db->select($where,'`id`,`footprint_time`,`addtime`','',$order);
-
-			$item=array();
-			$info_unique =assoc_unique($info ,'footprint_time');
-
-			foreach ($info_unique as $key => $value) {
-				$item[$key]['addtime']=date('Y-m-d',$value['addtime']);
-				$where1 = 'userid='.$userid.' AND addtime>='.$date.' and footprint_time='.$value['footprint_time'];
-				$item[$key]['data'] = $this->member_footprint_db->select($where1,'`id`,`url`,`thumb`,`title`,`price`','',$order);
-			}
-
-
-			$this->_return_status(200,$item);
-
-		//==================	操作成功-显示数据 END
-		
-	}
-
-//====================================	商品足迹 END
-
-
-
-
-//====================================	店铺管理 START
-
-	/**
-	 * [store_audit 提交店铺审核资料]
-	 * @status [状态] -104参数不能为空/-103请先登录/-101账号不存在/-102帐号已锁定,无法登录
-	 * @param  [type] $store_logo [*店铺logo]
-	 * @param  [type] $store_name [*店铺名称]
-	 * @param  [type] $store_zmidcard [*店铺身份证正面]
-	 * @param  [type] $store_fmidcard [*店铺身份证反面]
-	 * @param  [type] $userid [*用户id]
-	 * @param  [type] $type [*类型：1web端、2APP端]
-	 * @return [type] [description]
-	 */
-	public function store_audit(){
-		$store_logo = $_POST['store_logo'];
-		$store_name = $_POST['store_name'];
-		$store_zmidcard = $_POST['store_zmidcard'];
-		$store_fmidcard = $_POST['store_fmidcard'];
-		$type = $_POST['type'] ? $_POST['type'] : 1;	//类型：1web端、2APP端
-		$userid = $type==1 ? param::get_cookie('_userid') : $_POST['userid'];	//用户id
-
-		//用手机号码查出用户账号
-		$memberinfo = $this->member_db->get_one(array('userid'=>$userid));
-
-		//==================	操作失败-验证 START
-			//参数不能为空
-			if (!$store_logo || !$store_name || !$store_zmidcard || !$store_fmidcard || !$type || !$userid) {
-				$this->_return_status(-104);
-			}
-			//请先登录
-			if (!$userid) {
-				$this->_return_status(-103);
-			}
-			//账号不存在
-			if (!$memberinfo) {
-				$this->_return_status(-101);
-			}
-			//帐号已锁定,无法登录
-			if($memberinfo['islock']==1) {
-				$this->_return_status(-102);
-			}
-		//==================	操作失败-验证 END
-
-
-
-
-		//==================	操作成功 END
-			$this->member_db->update(['shopname'=>$store_name,'store_logo'=>$store_logo,'store_audit'=>1],['userid'=>$userid]);
-
-			$this->_return_status(200);
-		//==================	操作成功 END
-
-	}
-
-
-
-//====================================	店铺管理 END
-
-
-
-
 
 }
 ?>
