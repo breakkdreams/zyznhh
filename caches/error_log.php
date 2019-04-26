@@ -90,3 +90,5 @@
 <?php exit;?>04-26 17:08:19 | 2 | "continue" targeting switch is equivalent to "break". Did you mean to use "continue 2"? | phpcms\libs\classes\db_mysqli.class.php | 254
 <?php exit;?>04-26 17:09:05 | 2 | "continue" targeting switch is equivalent to "break". Did you mean to use "continue 2"? | phpcms\libs\classes\db_mysqli.class.php | 245
 <?php exit;?>04-26 17:09:05 | 2 | "continue" targeting switch is equivalent to "break". Did you mean to use "continue 2"? | phpcms\libs\classes\db_mysqli.class.php | 254
+<?php exit;?>04-26 17:10:32 | 2 | "continue" targeting switch is equivalent to "break". Did you mean to use "continue 2"? | phpcms\libs\classes\db_mysqli.class.php | 245
+<?php exit;?>04-26 17:10:32 | 2 | "continue" targeting switch is equivalent to "break". Did you mean to use "continue 2"? | phpcms\libs\classes\db_mysqli.class.php | 254
