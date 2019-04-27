@@ -1,5 +1,5 @@
 <?php
-defined('IN_PHPCMS') or exit('No permission resources.');
+defined('IN_zy') or exit('No permission resources.');
 pc_base::load_app_func('global');
 pc_base::load_sys_class('form', '', 0);
 pc_base::load_sys_class('format', '', 0);
@@ -152,8 +152,8 @@ class goodsApi{
 
         $result = [
             'status' => 'success',
-            'code' => 1,
-            'message' => 'OK',
+            'code' => 200,
+            'message' => '查询成功',
             'data' => $info,
             'page' => [
                 'pagesize'=>10,
@@ -195,8 +195,8 @@ class goodsApi{
 
 		$result = [
 			'status' => 'success',
-			'code' => 1,
-			'message' => 'OK',
+			'code' => 200,
+			'message' => '查询成功',
 			'data' => [
 				'hiscon' => $hisarr,
                 'content' => $r
@@ -235,11 +235,11 @@ class goodsApi{
         }
         $info['album'] = string2array($info['album']);
 //        unset($info['content']);
-//        if ( $info['isspec'] == 1) {
-//            $where = ' goodsid = '.$gid;
-//            $sinfo = $this->goods_specs_db->select($where,'id,specid,specids,specprice,specstock,status','',$order = ' id ASC ');
-//            $info['specdata'] = $sinfo;
-//        }
+       if ( $info['isspec'] == 1) {
+           $where = ' goodsid = '.$gid;
+           $sinfo = $this->goods_specs_db->select($where,'id,specid,specids,specprice,specstock,status','',$order = ' id ASC ');
+           $info['specdata'] = $sinfo;
+       }
 
         $result = [
             'status' => 'success',
@@ -579,9 +579,9 @@ class goodsApi{
 			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
 		}
 
-        $sql = 'SELECT b.id, b.shopid, b.thumb, b.goods_name, b.shop_price, b.stock, a.id as cartid, a.goodsspecid, a.cartnum, c.specprice, c.specstock, c.specid, c.specids FROM phpcms_goodscarts a INNER JOIN phpcms_goods b ON a.goodsid = b.id and a.userid = '.$uid.' and a.ischeck <> 2 LEFT OUTER JOIN phpcms_goods_specs c ON a.goodsspecid = c.specid and c.shopid = b.shopid and c.goodsid = b.id';
-        // $sql = 'SELECT a.id, a.thumb, a.goods_name, a.shop_price, a.stock, b.goodsspecid, b.cartnum, c.specprice, c.specid, c.specids FROM phpcms_goods a LEFT OUTER JOIN phpcms_goodscarts b ON a.id = b.goodsid and b.userid = '.$uid.' LEFT OUTER JOIN phpcms_goods_specs c ON a.id = c.goodsid and c.shopid = '.$uid;
-        $sqls = 'SELECT b.shopid as id FROM phpcms_goodscarts a INNER JOIN phpcms_goods b ON a.goodsid = b.id and a.userid = '.$uid.' LEFT OUTER JOIN phpcms_goods_specs c ON a.goodsspecid = c.specid and c.shopid = '.$uid.' group by b.shopid ';
+        $sql = 'SELECT b.id, b.shopid, b.thumb, b.goods_name, b.shop_price, b.stock, a.id as cartid, a.goodsspecid, a.cartnum, c.specprice, c.specstock, c.specid, c.specids FROM zy_goodscarts a INNER JOIN zy_goods b ON a.goodsid = b.id and a.userid = '.$uid.' and a.ischeck <> 2 LEFT OUTER JOIN zy_goods_specs c ON a.goodsspecid = c.specid and c.shopid = b.shopid and c.goodsid = b.id';
+        // $sql = 'SELECT a.id, a.thumb, a.goods_name, a.shop_price, a.stock, b.goodsspecid, b.cartnum, c.specprice, c.specid, c.specids FROM zy_goods a LEFT OUTER JOIN zy_goodscarts b ON a.id = b.goodsid and b.userid = '.$uid.' LEFT OUTER JOIN zy_goods_specs c ON a.id = c.goodsid and c.shopid = '.$uid;
+        $sqls = 'SELECT b.shopid as id FROM zy_goodscarts a INNER JOIN zy_goods b ON a.goodsid = b.id and a.userid = '.$uid.' LEFT OUTER JOIN zy_goods_specs c ON a.goodsspecid = c.specid and c.shopid = '.$uid.' group by b.shopid ';
         $page = $_POST['page'] ? $_POST['page'] : '1';
         $info = $this->get_db->multi_listinfo($sql,$page,88888888);
         $infos = $this->get_db->multi_listinfo($sqls,$page,88888888);
@@ -837,9 +837,9 @@ class goodsApi{
 		}
 
 
-		$sql = 'SELECT b.id, b.shopid, b.thumb, b.goods_name, b.shop_price, b.stock, a.id as cartid, a.goodsspecid, a.cartnum, c.specprice, c.specstock, c.specid, c.specids FROM phpcms_goodscarts a INNER JOIN phpcms_goods b ON a.goodsid = b.id and a.userid = '.$uid.' and a.id in('.$cids.') LEFT OUTER JOIN phpcms_goods_specs c ON a.goodsspecid = c.specid and c.shopid = b.shopid and c.goodsid = b.id';
+		$sql = 'SELECT b.id, b.shopid, b.thumb, b.goods_name, b.shop_price, b.stock, a.id as cartid, a.goodsspecid, a.cartnum, c.specprice, c.specstock, c.specid, c.specids FROM zy_goodscarts a INNER JOIN zy_goods b ON a.goodsid = b.id and a.userid = '.$uid.' and a.id in('.$cids.') LEFT OUTER JOIN zy_goods_specs c ON a.goodsspecid = c.specid and c.shopid = b.shopid and c.goodsid = b.id';
 
-		$sqls = 'SELECT b.shopid as id FROM phpcms_goodscarts a INNER JOIN phpcms_goods b ON a.goodsid = b.id and a.userid = '.$uid.' and a.id in('.$cids.') LEFT OUTER JOIN phpcms_goods_specs c ON a.goodsspecid = c.specid and c.shopid = '.$uid.' group by b.shopid ';
+		$sqls = 'SELECT b.shopid as id FROM zy_goodscarts a INNER JOIN zy_goods b ON a.goodsid = b.id and a.userid = '.$uid.' and a.id in('.$cids.') LEFT OUTER JOIN zy_goods_specs c ON a.goodsspecid = c.specid and c.shopid = '.$uid.' group by b.shopid ';
 
         $page = $_GET['page'] ? $_GET['page'] : '1';
         $info = $this->get_db->multi_listinfo($sql,$page,88888888);
@@ -1045,34 +1045,40 @@ class goodsApi{
 		}
 
 
-		$sql = 'SELECT b.id, b.shopid, b.thumb, b.goods_name, b.shop_price, b.stock, a.id as cartid, a.goodsspecid, a.cartnum, c.specprice, c.specstock, c.specid, c.specids FROM phpcms_goodscarts a INNER JOIN phpcms_goods b ON a.goodsid = b.id and a.userid = '.$uid.' and a.id in('.$cids.') LEFT OUTER JOIN phpcms_goods_specs c ON a.goodsspecid = c.specid and c.shopid = b.shopid and c.goodsid = b.id';
+		$sql = 'SELECT b.id, b.shopid, b.thumb, b.goods_name, b.shop_price,b.score_price, b.stock, a.id as cartid, a.goodsspecid, a.cartnum, c.specprice, c.specstock, c.specid, c.specids FROM zy_goodscarts a INNER JOIN zy_goods b ON a.goodsid = b.id and a.userid = '.$uid.' and a.id in('.$cids.') LEFT OUTER JOIN zy_goods_specs c ON a.goodsspecid = c.specid and c.shopid = b.shopid and c.goodsid = b.id';
 
-		$sqls = 'SELECT b.shopid as id FROM phpcms_goodscarts a INNER JOIN phpcms_goods b ON a.goodsid = b.id and a.userid = '.$uid.' and a.id in('.$cids.') LEFT OUTER JOIN phpcms_goods_specs c ON a.goodsspecid = c.specid and c.shopid = '.$uid.' group by b.shopid ';
+		$sqls = 'SELECT b.shopid as id FROM zy_goodscarts a INNER JOIN zy_goods b ON a.goodsid = b.id and a.userid = '.$uid.' and a.id in('.$cids.') LEFT OUTER JOIN zy_goods_specs c ON a.goodsspecid = c.specid and c.shopid = '.$uid.' group by b.shopid ';
 
         $page = $_GET['page'] ? $_GET['page'] : '1';
         $info = $this->get_db->multi_listinfo($sql,$page,88888888);   
 	    
         $narr = [];
         $total = 0;
-        // $tnum = 0;
+		// $tnum = 0;
+		$scoretotal = 0;
         foreach ($info as $k => $v) {
         	if(!isset($narr[$v['shopid']])){
         		$narr[$v['shopid']] = [
 	        		'shopid' => $v['shopid'],
 	        		'stprice'=>0,
-	        		'stnum'=>0
+					'stnum'=>0,
+					'scoreprice'=>0,
         		];
         	}
         	
         	if ( $v['goodsspecid'] != 0 ) {
-        		$jg = $v['specprice'];
+				$jg = $v['specprice'];
         	} else {
         		$jg = $v['shop_price'];
-        	}
+			}
+			
+			$sp = $v['score_price'];
 
         	$narr[$v['shopid']]['stprice'] += $jg*$v['cartnum'];
-        	$narr[$v['shopid']]['stnum'] += $v['cartnum'];
-        	$total += $jg*$v['cartnum'];
+			$narr[$v['shopid']]['stnum'] += $v['cartnum'];
+			$narr[$v['shopid']]['scoreprice'] += $sp*$v['cartnum'];
+			$total += $jg*$v['cartnum'];
+			$scoretotal += $sp*$v['cartnum'];
         	// $tnum += $v['cartnum'];
         	$narr[$v['shopid']]['cartinfo'][] = [
         		'cartid' => $v['cartid'],
@@ -1084,9 +1090,22 @@ class goodsApi{
         		'goodsprice' => $jg,
         		'cartnum' => $v['cartnum'],
         	];
-        }
+		}
+		
+		//获取用户的积分值
+		$member=$this->member_db->get_one(array('userid'=>$userid));
+		$userscore = $member['scoremoney'];
+		if($userscore < $scoretotal){
+			$result = [
+				'status' => 'error',
+				'code' => -300,
+				'message' => '积分不足'
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+		}
+		
 
-        $token_url= APP_PATH.'index.php?m=zyorder&c=zyorder_api&a=addorder';
+        $token_url= APP_PATH.'index.php?m=zyorder&c=zyorderApi&a=addorder';
         
         $data = array (
         	'userid' => $uid,
@@ -1097,7 +1116,8 @@ class goodsApi{
     		'lx_mobile' => $lx_mobile,
     		'lx_name' => $lx_name,
     		'lx_code' => $lx_code,
-    		'usernote' => $mes,
+			'usernote' => $mes,
+			'scoretotal' => $scoretotal,
     		'shopdata' => $narr  
         );
         $content = http_build_query($data);

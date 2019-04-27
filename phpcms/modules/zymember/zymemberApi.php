@@ -1750,5 +1750,241 @@ class zymemberApi{
 	}
 //====================================	私有验证函数 END
 
+/**
+	 * 订单模块_验证支付密码是否正确
+	 * @param  [type] $userid [*用户id]
+	 * @param  [type] $pay_password [*支付密码]
+	 * @return [json]         [数据组]
+	 */
+	public function zyorder_offpaypas()
+	{
+		$userid = $_POST['userid'];	//用户id
+		$pay_password = $_POST['pay_password'];	//支付密码
+
+
+
+		//==================	操作失败-验证 START
+			if(!$userid || !$pay_password){
+				$result = [
+					'status'=>'error',
+					'code'=>-1,
+					'message'=>'用户id、交易密码不能为空',
+				];
+				exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+			}
+
+			$memberinfo = $this->members_db->get_one(['userid'=>$userid]);
+			if(!$memberinfo){
+				$result = [
+					'status'=>'error',
+					'code'=>-2,
+					'message'=>'用户不存在',
+					
+				];
+				exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+			}
+
+			//请先设置支付密码
+			if(!$memberinfo['trade_password']) {
+				$result = [
+					'status'=>'error',
+					'code'=>-3,
+					'message'=>'请先设置交易密码',
+				];
+				exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+			}
+
+			//密码错误
+			if($memberinfo['trade_password'] != password($pay_password, $memberinfo['trade_encrypt'])) {
+				$result = [
+					'status'=>'error',
+					'code'=>-4,
+					'message'=>'密码错误',
+				];
+				exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+			}
+
+		//==================	操作成功-返回数据 START
+
+			$result = [
+				'status'=>'success',
+				'code'=>200,
+				'message'=>'操作成功'
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+
+		//==================	操作成功-返回数据 END
+
+	}
+
+
+	/**
+	 * 公共模块_减少余额
+	 * @param  [type] $userid [*用户id]
+	 * @param  [int] $amount [*金额]
+	 * @param  [type] $describe [*描述]
+	 * @param  [type] $module [*所属模块]
+	 * @return [json]         [数据组]
+	 */
+	public function pub_reduceamount($userid=NULL,$amount=0,$describe,$module)
+	{
+		$userid = $_GET['userid'];
+		$describe = $_GET['describe'];
+		$module = $_GET['module'];
+		$amount = $_GET['amount'];
+		//==================	操作失败-验证 START
+		if(!$userid){
+			$result = [
+				'status'=>'error',
+				'code'=>-1,
+				'message'=>'请输入用户id',
+				
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+		}
+
+		$memberinfo = $this->members_db->get_one(['userid'=>$userid]);
+		if(!$memberinfo){
+			$result = [
+				'status'=>'error',
+				'code'=>-2,
+				'message'=>'用户不存在',
+				
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+		}
+		if($memberinfo['amount']<$amount){
+			$result = [
+				'status'=>'error',
+				'code'=>-3,
+				'message'=>'余额不足',
+				
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+		}
+		if(!$describe || !$module){
+			$result = [
+				'status'=>'error',
+				'code'=>-4,
+				'message'=>'描述、所属模块内容不能为空',
+				
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+		}
+		//==================	操作失败-验证 END
+
+		//==================	操作成功-更新数据 START
+		$this->members_db->update(['amount'=>'-='.$amount],['userid'=>$userid]);
+		$result = [
+			'status'=>'success',
+			'code'=>200,
+			'message'=>'操作成功',
+			
+		];
+		exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+		//==================	操作成功-更新数据 END
+	}
+
+
+	/**
+	 * 公共模块_积分增加
+	 * @param  [type] $userid [*用户id]
+	 * @param  [int] $scoremoney [*积分]
+	 * @param  [type] $describe [*描述]
+	 * @param  [type] $module [*所属模块]
+	 * @return [json]         [数据组]
+	 */
+	public function pub_addscoremoney($userid=NULL,$scoremoney=0,$describe,$module)
+	{
+		$userid = $_GET['userid'];
+		$describe = $_GET['describe'];
+		$module = $_GET['module'];
+		$scoremoney = $_GET['scoremoney'];
+		//==================	操作失败-验证 START
+		if(!$userid){
+			$result = [
+				'status'=>'error',
+				'code'=>-1,
+				'message'=>'请输入用户id',
+				
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+		}
+
+		$memberinfo = $this->members_db->get_one(['userid'=>$userid]);
+		if(!$memberinfo){
+			$result = [
+				'status'=>'error',
+				'code'=>-2,
+				'message'=>'用户不存在',
+				
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+		}
+		
+		if(!$describe || !$module){
+			$result = [
+				'status'=>'error',
+				'code'=>-4,
+				'message'=>'描述、所属模块内容不能为空',
+				
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+		}
+		//==================	操作失败-验证 END
+
+		//==================	操作成功-更新数据 START
+		$this->members_db->update(['scoremoney'=>'+='.$scoremoney],['userid'=>$userid]);
+		$result = [
+			'status'=>'success',
+			'code'=>200,
+			'message'=>'操作成功',
+			
+		];
+		exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+		//==================	操作成功-更新数据 END
+	}
+
+
+	/**
+	 * 商品模块_获取用户昵称
+	 * @param  [type] $ids [*用户id，已逗号的形式传值]
+	 * @return [json]         [数据组]
+	 */
+	public function zyshop_nickname($ids)
+	{
+		$useridstr = $_POST['ids'];
+		if(!$useridstr){
+			$result = [
+				'status'=>'error',
+				'code'=>-1,
+				'message'=>'用户id不能为空',
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+		}
+
+		$where='userid in ('.$useridstr.')';
+		$sql='SELECT `userid`,`shopname`,`groupid`as`group`,`proprietary` FROM phpcms_member WHERE '.$where;
+		$infos = $this->get_db->multi_listinfo($sql);
+
+		foreach ($infos as $key => $value) {
+			$infos[$key]['group'] = $value['group']==2 ? 0 : 1;
+			$infos[$key]['proprietary'] = $value['proprietary']==1 ? 1 : 0;
+		}
+
+
+		$result = [
+			'status'=>'success',
+			'code'=>200,
+			'message'=>'操作成功',
+			'data'=>$infos,
+		];
+		exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+	}
+
+
 }
+
+
+
 ?>
