@@ -626,5 +626,25 @@ return array (
     'installdate' => '2018-10-01',
     'updatedate' => '2018-10-01',
   ),
+  'banner' => 
+  array (
+    'module' => 'banner',
+    'name' => '轮播图',
+    'url' => '',
+    'iscore' => '0',
+    'version' => '1.0',
+    'description' => '',
+    'setting' => 'array (
+  1 => 
+  array (
+    \'is_post\' => \'1\',
+    \'enablecheckcode\' => \'0\',
+  ),
+)',
+    'listorder' => '0',
+    'disabled' => '0',
+    'installdate' => '2010-09-06',
+    'updatedate' => '2010-09-06',
+  ),
 );
 ?>

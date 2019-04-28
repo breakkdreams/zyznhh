@@ -1,5 +1,5 @@
 <?php
-defined('IN_zy') or exit('No permission resources.');
+defined('IN_PHPCMS') or exit('No permission resources.');
 pc_base::load_app_func('global');
 pc_base::load_sys_class('form', '', 0);
 pc_base::load_sys_class('format', '', 0);
@@ -37,7 +37,10 @@ class goodsApi{
 		$this->goodscarts_db = pc_base::load_model('goodscarts_model');
 		//商品搜索历史表
 		$this->goods_sh_db = pc_base::load_model('goods_sh_model');
-
+		//轮播图表
+		$this->banner_db = pc_base::load_model('banner_model');
+		//评价
+		$this->evaluate_db = pc_base::load_model('zy_evaluate_model');
 		
 	}
 
@@ -60,7 +63,7 @@ class goodsApi{
         $page = $_POST['page'] ? $_POST['page'] : '1';
         $goods_list = $this->get_db->multi_listinfo($sql,$page,$pagesize = 10);
         //banner图
-
+		$bannerinfo = $this->banner_db->select('');
         //头条
 
         //二级分类
@@ -71,8 +74,9 @@ class goodsApi{
             'status'=>'success',
             'code'=>200,
             'message'=>'成功',
-            'goods_list'=>$goods_list,
-            'cate_list'=>$cate_list,
+            'goods_list'=>$goods_list,//商品列表
+			'cate_list'=>$cate_list,//分类列表
+			'bannerinfo'=>$bannerinfo,//轮播图列表
         ];
         exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
     }
@@ -148,7 +152,8 @@ class goodsApi{
         $res = $this->goods_db->query($sqls);
         $page = $this->goods_db->fetch_array($res);
         $totalnum = $page[0]['num'];
-        $totalpage = ceil($totalnum/10);
+		$totalpage = ceil($totalnum/10);
+		
 
         $result = [
             'status' => 'success',
@@ -239,19 +244,55 @@ class goodsApi{
            $where = ' goodsid = '.$gid;
            $sinfo = $this->goods_specs_db->select($where,'id,specid,specids,specprice,specstock,status','',$order = ' id ASC ');
            $info['specdata'] = $sinfo;
-       }
+	   }
+	   
+	   $wheres = ' shopid = '.$gid;
+	   $evaluateid = $this->evaluate_db->listinfo($wheres,$order = '',$page='1', $pages = '10');
 
         $result = [
             'status' => 'success',
             'code' => 1,
             'message' => 'OK',
-            'data' => $info,
+			'data' => $info,
+			'evaluateid' => $evaluateid
         ];
         $jg = json_encode($result,JSON_UNESCAPED_UNICODE);
         $jg = stripslashes($jg);
 
         exit($jg);
-    }
+	}
+	
+	/**
+     *获取商品评价列表
+     * param:gid(商品id)
+     */
+	public function goods_pj(){
+
+		$gid = $_POST['gid'];
+		$page = $_POST['page'];
+
+        if ( !$gid || !is_numeric($gid) ) {
+            $result = [
+                'status' => 'error',
+                'code' => 0,
+                'message' => '参数异常！',
+            ];
+            exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+		}
+
+		$wheres = ' shopid = '.$gid;
+        $evaluateid = $this->evaluate_db->listinfo($wheres,$order = '',$page, $pages = '10');
+
+		$result = [
+			'status' => 'success',
+			'code' => 200,
+			'message' => '查询成功',
+			'data' => [
+				'evaluateid' => $evaluateid,
+			]
+		];
+		exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+	}
 
     /**
      *商品配置

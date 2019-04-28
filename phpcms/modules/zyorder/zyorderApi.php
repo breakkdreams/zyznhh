@@ -164,12 +164,12 @@ class zyorder_api{
 	*/
 	public function order_list(){
 		//用户id和用户名
-		//$_userid = $_GET['userid'];
-		$pageindex = $_GET['pageindex'];
-		$pagesize = $_GET['pagesize'];
+		//$_userid = $_POST['userid'];
+		$pageindex = $_POST['pageindex'];
+		$pagesize = $_POST['pagesize'];
 
 		$_userid = param::get_cookie('_userid');
-		$userid = $_GET['userid'];//用户id，APP端必须传
+		$userid = $_POST['userid'];//用户id，APP端必须传
 		//非APP端直接用$_userid
 		if($_userid){
 			$uid = $_userid;
@@ -186,13 +186,13 @@ class zyorder_api{
 			$this->empty_userid();
 		}
 		$where = ' userid = '.$uid;
-		if($_GET['status']==1){
+		if($_POST['status']==1){
 			$where.= ' AND status=1';
-		}else if($_GET['status']==2){
+		}else if($_POST['status']==2){
 			$where.= ' AND status=2';
-		}else if($_GET['status']==3){
+		}else if($_POST['status']==3){
 			$where.= ' AND status=3';
-		}else if($_GET['status']==4){
+		}else if($_POST['status']==4){
 			$where.= ' AND status=4';
 		}else{
 			$where.= ' AND 1';
@@ -234,10 +234,10 @@ class zyorder_api{
 	//订单详情
 	public function order_info(){
 		//用户id和用户名
-		//$_userid = $_GET['userid'];
-		$id = $_GET['id'];
+		//$_userid = $_POST['userid'];
+		$id = $_POST['id'];
 		$_userid = param::get_cookie('_userid');
-		$userid = $_GET['userid'];
+		$userid = $_POST['userid'];
 
 		if($_userid){
 			$uid = $_userid;
@@ -250,7 +250,7 @@ class zyorder_api{
 			exit($this->empty_userid());
 		}
 		if($this->check_uid($id,$uid)){
-			$order = $this->order_db->get_one(array('id'=>$_GET['id'],'userid'=>$uid));
+			$order = $this->order_db->get_one(array('id'=>$_POST['id'],'userid'=>$uid));
 			if($this->check_uid_status($id,$uid,3)){
 			  $KdApi = pc_base::load_app_class('KdApiSearch');
 			  $KdApi = new KdApiSearch();
@@ -467,6 +467,7 @@ class zyorder_api{
 		if($this->check_uid_status($id,$_userid,4)){
 		    foreach($evalute_arr as $val){
 				$shopid = $val['shopid'];
+				$img = $val['img'];
 		     	$content = $val['content'];
 		        $star = [];
 				$setarr = [];
@@ -480,14 +481,14 @@ class zyorder_api{
 				    	$star[$k] = $v;
 				   }
 			    }
-				$result = $this->uploadimg($_FILES,$_userid);
+				//$result = $this->uploadimg($_FILES,$_userid);
 				$data =[
 				  'orderid'=>$id,
 				  'shopid'=>$shopid,
 				  'content'=>$content,
 				  'star'=>$star,
 				  'userid'=>$_userid,
-				  'img'=>$result,
+				  'img'=>$img,
 				  'addtime'=>time()
 			     ];
 			$evaluateid = $this->evaluate_db->insert($data,true);
