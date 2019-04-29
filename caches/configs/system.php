@@ -25,6 +25,7 @@ return array(
 'attachment_stat' => '1',//是否记录附件使用状态 0 统计 1 统计， 注意: 本功能会加重服务器负担
 
 'js_path' => 'http://lk.300c.cn/zyznhh/statics/js/', //CDN JS
+'layui_path' => 'http://lk.300c.cn/zyznhh/statics/ad/layui/', //CDN JS
 'css_path' => 'http://lk.300c.cn/zyznhh/statics/css/', //CDN CSS
 'img_path' => 'http://lk.300c.cn/zyznhh/statics/images/', //CDN img
 'app_path' => 'http://localhost/zyznhh/',//动态域名配置地址
