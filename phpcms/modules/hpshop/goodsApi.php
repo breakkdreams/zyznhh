@@ -783,44 +783,6 @@ class goodsApi{
 
 
 	/**
-     *购物车结算前置操作
-     */
-	// public function cartsettle(){
-	// 	//dump($_POST,true);
-	// 	$_userid = param::get_cookie('_userid');
-	// 	$userid = $_POST['uid'];
-	// 	$cids = $_POST['cids'];
-
-	// 	if($_userid){
-	// 		$uid = $_userid;
-	// 	}else{
-	// 		$uid = $userid;
-	// 	}
-
-	// 	if ( !$uid ) {
-	// 		$result = [
-	// 			'status' => 'error',
-	// 			'code' => 0,
-	// 			'message' => '请先登录！',
-	// 		];
-	// 		exit(json_encode($result,JSON_UNESCAPED_UNICODE));
-	// 	}
-	// 	if (!$cids) {
-	// 		$result = [
-	// 			'status' => 'error',
-	// 			'code' => -1,
-	// 			'message' => '访问受限，缺少必要参数',
-	// 		];
-	// 		exit(json_encode($result,JSON_UNESCAPED_UNICODE));
-	// 	}
-
-
-		
-	// }
-
-
-
-	/**
      *订单结算预览
      */
 	public function settlement(){
@@ -831,7 +793,7 @@ class goodsApi{
 		$cids = $_POST['cids'];
 
 		if($_userid){
-			$uid = $_userid;
+			$uid = $userid;
 		}else{
 			$uid = $userid;
 		}
@@ -1057,7 +1019,6 @@ class goodsApi{
         );
 		$token = json_decode(file_get_contents($token_url,false,stream_context_create($options)));
 	    $rs =  json_decode(json_encode($token),true);
-
 		$province = $rs['data']['province']/*$_POST['province']*/;  //收货地址省 
 		$city = $rs['data']['city']/*$_POST['city']*/;//收货地址市
 		$area = $rs['data']['district']/*$_POST['area']*/;//收货地址区
@@ -1146,8 +1107,8 @@ class goodsApi{
 		}
 		
 
-        $token_url= APP_PATH.'index.php?m=zyorder&c=zyorderApi&a=addorder';
-        
+		$token_url= APP_PATH.'index.php?m=zyorder&c=zyorderApi&a=addorder';
+		
         $data = array (
         	'userid' => $uid,
         	'province' => $province,  
@@ -1173,7 +1134,7 @@ class goodsApi{
             )
         );
 		$token = json_decode(file_get_contents($token_url,false,stream_context_create($options)));
-	    $rs =  json_decode(json_encode($token),true);
+		$rs =  json_decode(json_encode($token),true);
 
 	    if ( $rs['data']['code'] != 1 ) {
 
@@ -1185,7 +1146,7 @@ class goodsApi{
 			'status' => 'success',
 			'code' => 1,
 			'message' => 'OK',
-			'data' =>$rs['data']
+			'data' =>$rs
 		];
 		
 		exit(json_encode($result,JSON_UNESCAPED_UNICODE));

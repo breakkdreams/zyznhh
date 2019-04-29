@@ -18,6 +18,7 @@ class order extends admin {
 		parent::__construct();
 		//会员主表
 		$this->members_db = pc_base::load_model('members_model');
+		$this->member_db = pc_base::load_model('member_model');
 		//会员附表
 		$this->member_detail_db = pc_base::load_model('member_detail_model');
 		$this->shop_db = pc_base::load_model('shop_model');
@@ -477,6 +478,175 @@ class order extends admin {
 		//都没有选择删除什么
 		if(empty($_POST['id'])) {
 			showmessage('请选择要删除的记录',HTTP_REFERER);
+		}
+	}
+
+
+
+	/**
+     * 同意/拒绝退款
+     */
+	public function agree_refuse_tk (){
+		$id = $_POST['id'];
+		$isagree = $_POST['isagree'];//1.同意 2.拒绝
+		if ( !$id ) {
+			$result = [
+				'status' => 'error',
+				'code' => -1,
+				'message' => '缺少必要参数！',
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+		}
+		//查询订单
+		$order =  $this->order_db->get_one(array('id'=>$id));
+		//判断是否退款申请 = 7
+		if($order['status'] == 7){
+			if($isagree == 1){
+				$result = $this->order_db->update(array('status'=>8,'shstatus'=>1),array('id'=>$id));
+				 if($result){
+					//返回用户余额与积分
+					$member =  $this->member_db->get_one(array('userid'=>$order['userid']));
+					//获取用户余额,积分
+					$membermoney = $member['amount'];
+					$memberscore = $member['scoremoney'];
+					$ordermoney = $order['totalprice'];
+					$orderscore = $order['scoreprice'];
+
+					$totalmoney = $membermoney+$ordermoney;
+					$totalscore = $memberscore+$orderscore;
+					$this->member_db->update(array('scoremoney'=>$totalscore,'amount'=>$totalmoney),array('userid'=>$order['userid']));
+					$result = [
+						'status' => 'error',
+						'code' => 1,
+						'message' => '操作成功',
+					];
+					exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+				 }else{
+					$result = [
+						'status' => 'error',
+						'code' => -1,
+						'message' => '操作失败',
+					];
+					exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+				}
+			}elseif($isagree == 2){
+				$result = $this->order_db->update(array('status'=>$order['prestatus'],'shstatus'=>2),array('id'=>$id));
+			}
+		}else{
+			$result = [
+				'status' => 'error',
+				'code' => -1,
+				'message' => '未申请退款',
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+		}
+	}
+
+
+	/**
+     * 同意/拒绝申请的退货
+     */
+	public function agree_refuse_apply_th (){
+		$id = $_POST['id'];
+		$isagree = $_POST['isagree'];//1.同意 2.拒绝
+		if ( !$id ) {
+			$result = [
+				'status' => 'error',
+				'code' => -1,
+				'message' => '缺少必要参数！',
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+		}
+		//查询订单
+		$order =  $this->order_db->get_one(array('id'=>$id));
+		//判断是否退款申请 = 10
+		if($order['status'] == 10){
+			if($isagree == 1){
+				$result = $this->order_db->update(array('status'=>11,'shstatus'=>1),array('id'=>$id));
+				 if($result){
+					$result = [
+						'status' => 'error',
+						'code' => 1,
+						'message' => '操作成功',
+					];
+					exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+				 }else{
+					$result = [
+						'status' => 'error',
+						'code' => -1,
+						'message' => '操作失败',
+					];
+					exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+				}
+			}elseif($isagree == 2){
+				$result = $this->order_db->update(array('status'=>$order['prestatus'],'shstatus'=>2),array('id'=>$id));
+			}
+		}else{
+			$result = [
+				'status' => 'error',
+				'code' => -1,
+				'message' => '未申请退货',
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+		}
+	}
+
+	/**
+     * 同意/拒绝退货
+     */
+	public function agree_refuse_th (){
+		$id = $_POST['id'];
+		$isagree = $_POST['isagree'];//1.同意 2.拒绝
+		if ( !$id ) {
+			$result = [
+				'status' => 'error',
+				'code' => -1,
+				'message' => '缺少必要参数！',
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+		}
+		//查询订单
+		$order =  $this->order_db->get_one(array('id'=>$id));
+		//判断是否退款申请 = 12
+		if($order['status'] == 12){
+			if($isagree == 1){
+				$result = $this->order_db->update(array('status'=>13,'shstatus'=>1),array('id'=>$id));
+				 if($result){
+					//返回用户余额与积分
+					$member =  $this->member_db->get_one(array('userid'=>$order['userid']));
+					//获取用户余额,积分
+					$membermoney = $member['amount'];
+					$memberscore = $member['scoremoney'];
+					$ordermoney = $order['totalprice'];
+					$orderscore = $order['scoreprice'];
+
+					$totalmoney = $membermoney+$ordermoney;
+					$totalscore = $memberscore+$orderscore;
+					$this->member_db->update(array('scoremoney'=>$totalscore,'amount'=>$totalmoney),array('userid'=>$order['userid']));
+					$result = [
+						'status' => 'error',
+						'code' => 1,
+						'message' => '操作成功',
+					];
+					exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+				 }else{
+					$result = [
+						'status' => 'error',
+						'code' => -1,
+						'message' => '操作失败',
+					];
+					exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+				}
+			}elseif($isagree == 2){
+				$result = $this->order_db->update(array('status'=>$order['prestatus'],'shstatus'=>2),array('id'=>$id));
+			}
+		}else{
+			$result = [
+				'status' => 'error',
+				'code' => -1,
+				'message' => '未申请退货',
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
 		}
 	}
 

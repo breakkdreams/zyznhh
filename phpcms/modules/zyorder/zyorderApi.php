@@ -4,7 +4,7 @@ pc_base::load_app_func('global');
 pc_base::load_sys_class('form', '', 0);
 pc_base::load_sys_class('format', '', 0);
 
-class zyorder_api{
+class zyorderApi{
 	function __construct() {
 		$this->get_db = pc_base::load_model('get_model');
 		$this->order_db = pc_base::load_model('zy_order_model');
@@ -318,7 +318,7 @@ class zyorder_api{
 			$result = $this->order_db->update(array('status'=>6),array('id'=>$id));
 			if($result){
 				$info = $this->order_db->get_one(array('id'=>$id));
-				$score = $info['scoremoney'];
+				$score = $info['scoreprice'];
 				$data=[
 					'userid'=>$uid,
 					'scoremoney'=>$score,
@@ -465,22 +465,28 @@ class zyorder_api{
 			 $this->empty_userid();
 		}
 		if($this->check_uid_status($id,$_userid,4)){
+			 $evalute_arr = json_decode(stripslashes($evalute_arr),true);
 		    foreach($evalute_arr as $val){
+					
 				$shopid = $val['shopid'];
 				$img = $val['img'];
-		     	$content = $val['content'];
-		        $star = [];
-				$setarr = [];
-				$evaluate_set = $this->evaluate_set_db->select(1);
-				foreach($evaluate_set as $v){
-				    array_push($setarr,$v['value']);
-			    }
+					 $content = $val['content'];
+					 
+					 $star = $val['star'];
+		    //     $star = [];
+				// $setarr = [];
+				// $evaluate_set = $this->evaluate_set_db->select(1);
+				// foreach($evaluate_set as $v){
+				//     array_push($setarr,$v['value']);
+			  //   }
 
-			    foreach($_POST as $k=>$v){
-				   if(in_array($k,$setarr)){
-				    	$star[$k] = $v;
-				   }
-			    }
+			  //   foreach($_POST['star'] as $k=>$v){
+				//    if(in_array($k,$setarr)){
+				//     	$star[$k] = $v;
+				//    }
+				//   }
+				
+
 				//$result = $this->uploadimg($_FILES,$_userid);
 				$data =[
 				  'orderid'=>$id,
@@ -490,7 +496,8 @@ class zyorder_api{
 				  'userid'=>$_userid,
 				  'img'=>$img,
 				  'addtime'=>time()
-			     ];
+					 ];
+					 
 			$evaluateid = $this->evaluate_db->insert($data,true);
 			$result = $this->order_db->update(array('status'=>5),array('id'=>$_POST['id']));
 			if($result){
@@ -517,18 +524,76 @@ class zyorder_api{
 		if($this->check_uid($orderid,$_userid)){
 		$order = $this->order_db->get_one(array('id'=>$orderid));
 
-		if($order['status']>2){
+		if($order['status']==2){
 		   $result = $this->order_db->update(array('status'=>7,'prestatus'=>$order['status'],'tk_reason'=>$tk_reason,'tk_explain'=>$tk_explain,'shstatus'=>4),array('id'=>$orderid));
 		   if($result){
-		      $this->caozuo_success("退款成功");
+		      $this->caozuo_success("申请成功,等待审核");
 		   }else{
 		      $this->caozuo_fail("退款失败");
 	       }
+		}else{
+			$this->caozuo_fail("该状态下不支持退款");
 		}
 		}else{
 		   $this->error_check_uid();
 		}
 	}
+
+		//申请退货
+		function apply_th(){
+			$_userid = $_POST['userid'];
+			$orderid = $_POST['id'];
+			$tk_reason = $_POST['tk_reason'];
+			$tk_explain = $_POST['tk_explain'];
+			if($_userid==null){
+				$this->empty_userid();
+			}
+			if($this->check_uid($orderid,$_userid)){
+			$order = $this->order_db->get_one(array('id'=>$orderid));
+	
+			if($order['status']==4 || $order['status']==5){
+				 $result = $this->order_db->update(array('status'=>10,'prestatus'=>$order['status'],'tk_reason'=>$tk_reason,'tk_explain'=>$tk_explain,'shstatus'=>4),array('id'=>$orderid));
+				 if($result){
+						$this->caozuo_success("申请成功,等待审核");
+				 }else{
+						$this->caozuo_fail("退货失败");
+					 }
+			}else{
+				$this->caozuo_fail("该状态下不支持退货");
+			}
+			}else{
+				 $this->error_check_uid();
+			}
+		}
+
+
+		//商家同意退货后,发货
+		function th_wl(){
+			$_userid = $_POST['userid'];
+			$orderid = $_POST['id'];
+			$wuliu = $_POST['wuliu'];
+
+			if($_userid==null){
+				$this->empty_userid();
+			}
+			if($this->check_uid($orderid,$_userid)){
+			$order = $this->order_db->get_one(array('id'=>$orderid));
+	
+			if($order['status']==11){
+				 $result = $this->order_db->update(array('status'=>12,'wuliu'=>$wuliu,'shstatus'=>4),array('id'=>$orderid));
+				 if($result){
+						$this->caozuo_success("申请成功,等待审核");
+				 }else{
+						$this->caozuo_fail("申请失败");
+					 }
+			}else{
+				$this->caozuo_fail("该状态下不支持发货");
+			}
+			}else{
+				 $this->error_check_uid();
+			}
+		}
+		
 	
 	/**
      *订单余额支付
@@ -564,14 +629,15 @@ class zyorder_api{
 			];
 			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
 		}
-		$oid = '';
-		foreach ($oids as $key => $value) {
-			if ( isset($oid) ) {
-				$oid .= ','.$value;
-			} else {
-				$oid = $value;
-			}
-		}
+		$oid = $oids;
+		//$oid = '';
+		// foreach ($oids as $key => $value) {
+		// 	if ( isset($oid) ) {
+		// 		$oid .= ','.$value;
+		// 	} else {
+		// 		$oid = $value;
+		// 	}
+		// }
 
 		$where = ' id in ('.$oid.') and status = 1 and userid = '.$uid;
 		$count = $this->order_db->count($where);
@@ -606,7 +672,7 @@ class zyorder_api{
 			$return = json_decode($this->_crul_get($url,$data),true);
 
 			if ( $return['code']=='200' ) {
-				$result =  $this->order_db->update(array('status'=>2),$where);
+				$result =  $this->order_db->update(array('status'=>2,'pay_type'=>1,'paytime'=>time()),$where);
 				$result = [
 					'status' => 'success',
 					'code' => 1,
@@ -699,8 +765,6 @@ class zyorder_api{
 			}
 
 		}
-		
-		
 		$idarr = [];
 		foreach ($_POST['shopdata'] as $ks => $vs) {
 			$newdata = $data;
@@ -728,7 +792,7 @@ class zyorder_api{
 		$scoretotal = $_POST['scoretotal'];
 		$member=$this->member_db->get_one(array('userid'=>$_userid));
 		$userscore = $member['scoremoney'];
-		$cutscore = $scoretotal - $userscore;
+		$cutscore = $userscore - $scoretotal;
 		if($cutscore>0){
 			$data= array(
 				'scoremoney'=>$cutscore,

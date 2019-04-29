@@ -76,7 +76,7 @@ class zyaddr_api
      * @param $userid 用户id
      * */
     public function lists($userid){
-        $userid = empty($userid)?$_GET['userid']:$userid;
+        $userid = empty($userid)?$_POST['userid']:$userid;
 
         if(empty($userid)){
             $msg = array('status'=>'error','code'=>10001,'message'=>"请输入用户ID");
@@ -278,7 +278,7 @@ class zyaddr_api
      * */
     public function del($id)
     {
-        $id = empty($id)?$_GET['id']:$id;
+        $id = empty($id)?$_POST['id']:$id;
 
         if(empty($id)){
             $msg = array('status'=>'error','code'=>10001,'message'=>"请输入地址ID");
@@ -312,9 +312,9 @@ class zyaddr_api
      * @param $default 默认
      * */
     public function change($id,$default,$userid){
-        $id = empty($id)?$_GET['id']:$id;
-        $default = empty($default)? $_GET['default']:$default;
-        $userid = empty($userid)? $_GET['userid']:$userid;
+        $id = empty($id)?$_POST['id']:$id;
+        $default = empty($default)? $_POST['default']:$default;
+        $userid = empty($userid)? $_POST['userid']:$userid;
 
         if(empty($id)){
             $msg = array('status'=>'error','code'=>10001,'message'=>'请输入地址ID');

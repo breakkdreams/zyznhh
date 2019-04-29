@@ -92,21 +92,37 @@ include $this->admin_tpl('header', 'admin');
 		  case 6:echo '已取消';break;
 		  case 7:echo '申请退款';break;
 		  case 8:echo '退款成功';break;
-		  case 9:echo '客服介入';break;
+          case 9:echo '客服介入';break;
+          case 10:echo '申请退货';break;
+          case 11:echo '申请退货成功';break;
+          case 12:echo '等待商家收获';break;
+          case 13:echo '退货成功';break;
 	  }
 	  ?>
 	  <?php echo $info['remind'];?>
 	  </td>
-      <td>
+      <td align="center">
 	  <?php 
 	    switch($info['shstatus']){
-		   case 1:echo '同意退款';break;	
-		   case 2:echo '拒绝退款';break;	
+		   case 1:echo '同意';break;	
+		   case 2:echo '拒绝';break;	
 		   case 3:echo '客服介入';break;	
-		   case 4:echo '退款待处理';break;	
+		   case 4:echo '待处理';break;	
 		   default:echo '暂无售后';break;
-		}	
-	  ?>
+        }
+      ?>
+        <?php if($info['shstatus'] =='4' && $info['status'] ==7){?>
+            <a href="javascript:void(0);" onclick="agreetk('<?php echo $info['id']?>')"><font color="red">同意退款</font></a>/
+            <a href="javascript:void(0);" onclick="refusetk('<?php echo $info['id']?>')"><font color="red">拒绝退款</font></a>
+        <?php }?>
+        <?php if($info['shstatus'] =='4' && $info['status'] ==10){?>
+            <a href="javascript:void(0);" onclick="agreeapplyth('<?php echo $info['id']?>')"><font color="red">同意退货申请</font></a>/
+            <a href="javascript:void(0);" onclick="refuseapplyth('<?php echo $info['id']?>')"><font color="red">拒绝退货申请</font></a>
+        <?php }?>
+        <?php if($info['shstatus'] =='4' && $info['status'] ==12){?>
+            <a href="javascript:void(0);" onclick="agreeth('<?php echo $info['id']?>')"><font color="red">同意退货</font></a>/
+            <a href="javascript:void(0);" onclick="refuseth('<?php echo $info['id']?>')"><font color="red">拒绝退货</font></a>
+        <?php }?>
 	  </td>
       <td align="center">
         <?php if($info['status'] =='2'){?>
@@ -238,6 +254,102 @@ function view4(id) {
     void(0);
 }
 
+//同意退款
+function agreetk(id){
+    $.ajax({
+        url:'?m=zyorder&c=order&a=agree_refuse_tk&pc_hash=<?php echo $_SESSION['pc_hash'];?>',
+        data:{
+            'id':id,
+            'isagree':1
+        },
+        dataType:'json',
+        type:'post',
+        success:function(res){
+            alert(res.message);
+            location.reload();
+        },
+    });
+}
+//拒绝退款
+function refusetk(id){
+    $.ajax({
+        url:'?m=zyorder&c=order&a=agree_refuse_tk&pc_hash=<?php echo $_SESSION['pc_hash'];?>',
+        data:{
+            'id':id,
+            'isagree':2
+        },
+        dataType:'json',
+        type:'post',
+        success:function(res){
+            alert(res.message);
+            location.reload();
+        },
+    });
+}
+//同意申请的退货
+function refusetk(id){
+    $.ajax({
+        url:'?m=zyorder&c=order&a=agree_refuse_apply_th&pc_hash=<?php echo $_SESSION['pc_hash'];?>',
+        data:{
+            'id':id,
+            'isagree':1
+        },
+        dataType:'json',
+        type:'post',
+        success:function(res){
+            alert(res.message);
+            location.reload();
+        },
+    });
+}
+//拒绝申请的退货
+function refusetk(id){
+    $.ajax({
+        url:'?m=zyorder&c=order&a=agree_refuse_apply_th&pc_hash=<?php echo $_SESSION['pc_hash'];?>',
+        data:{
+            'id':id,
+            'isagree':2
+        },
+        dataType:'json',
+        type:'post',
+        success:function(res){
+            alert(res.message);
+            location.reload();
+        },
+    });
+}
+//同意退货
+function agreeth(id){
+    $.ajax({
+        url:'?m=zyorder&c=order&a=agree_refuse_th&pc_hash=<?php echo $_SESSION['pc_hash'];?>',
+        data:{
+            'id':id,
+            'isagree':1
+        },
+        dataType:'json',
+        type:'post',
+        success:function(res){
+            alert(res.message);
+            location.reload();
+        },
+    });
+}
+//拒绝退货
+function refuseth(id){
+    $.ajax({
+        url:'?m=zyorder&c=order&a=agree_refuse_th&pc_hash=<?php echo $_SESSION['pc_hash'];?>',
+        data:{
+            'id':id,
+            'isagree':2
+        },
+        dataType:'json',
+        type:'post',
+        success:function(res){
+            alert(res.message);
+            location.reload();
+        },
+    });
+}
 </script>
 
 
