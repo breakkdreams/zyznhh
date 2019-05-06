@@ -522,18 +522,18 @@ class zyorderApi{
 			$this->empty_userid();
 		}
 		if($this->check_uid($orderid,$_userid)){
-		$order = $this->order_db->get_one(array('id'=>$orderid));
+			$order = $this->order_db->get_one(array('id'=>$orderid));
 
-		if($order['status']==2){
-		   $result = $this->order_db->update(array('status'=>7,'prestatus'=>$order['status'],'tk_reason'=>$tk_reason,'tk_explain'=>$tk_explain,'shstatus'=>4),array('id'=>$orderid));
-		   if($result){
-		      $this->caozuo_success("申请成功,等待审核");
-		   }else{
-		      $this->caozuo_fail("退款失败");
-	       }
-		}else{
-			$this->caozuo_fail("该状态下不支持退款");
-		}
+			if($order['status']==2){
+				$result = $this->order_db->update(array('status'=>7,'prestatus'=>$order['status'],'tk_reason'=>$tk_reason,'tk_explain'=>$tk_explain,'shstatus'=>4),array('id'=>$orderid));
+				if($result){
+						$this->caozuo_success("申请成功,等待审核");
+				}else{
+						$this->caozuo_fail("退款失败");
+				}
+			}else{
+				$this->caozuo_fail("该状态下不支持退款");
+			}
 		}else{
 		   $this->error_check_uid();
 		}

@@ -48,3 +48,9 @@
 <?php exit;?>04-28 11:08:03 | 2 | Missing argument 2 for zymemberApi::account_login(), called in D:\phpStudy\WWW\zyznhh\phpcms\libs\classes\application.class.php on line 31 and defined | phpcms\modules\zymember\zymemberApi.php | 236
 <?php exit;?>04-28 11:08:03 | 2 | Missing argument 3 for zymemberApi::account_login(), called in D:\phpStudy\WWW\zyznhh\phpcms\libs\classes\application.class.php on line 31 and defined | phpcms\modules\zymember\zymemberApi.php | 236
 <?php exit;?>04-28 11:08:03 | 2 | Missing argument 4 for zymemberApi::account_login(), called in D:\phpStudy\WWW\zyznhh\phpcms\libs\classes\application.class.php on line 31 and defined | phpcms\modules\zymember\zymemberApi.php | 236
+<?php exit;?>05-05 10:41:48 | 2 | rmdir(D:/phpStudy/WWW/zyznhh/phpcms/languages/zh-cn/test_create_dir/): No such file or directory | phpcms\libs\functions\dir.func.php | 154
+<?php exit;?>05-05 10:41:48 | 2 | mkdir(): File exists           | phpcms\libs\functions\dir.func.php | 30
+<?php exit;?>05-05 10:41:48 | 2 | rmdir(D:/phpStudy/WWW/zyznhh/phpcms/languages/zh-cn/test_create_dir/): No such file or directory | phpcms\libs\functions\dir.func.php | 154
+<?php exit;?>05-05 10:41:48 | 2 | Invalid argument supplied for foreach() | phpcms\modules\admin\classes\module_api.class.php | 55
+<?php exit;?>05-05 10:43:30 | 2 | fsockopen(): php_network_getaddresses: getaddrinfo failed: ��֪������������  | phpcms\libs\classes\http.class.php | 84
+<?php exit;?>05-05 10:43:30 | 2 | fsockopen(): unable to connect to juhe.phpcms.cn:80 (php_network_getaddresses: getaddrinfo failed: ��֪������������ ) | phpcms\libs\classes\http.class.php | 84
