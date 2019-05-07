@@ -48,14 +48,15 @@ include $this->admin_tpl('header', 'admin');
 <input type="hidden" value="zybaike" name="m">
 <input type="hidden" value="zybaike" name="c">
 <input type="hidden" value="pinglun" name="a">
-
+<input type="hidden" value="<?php echo $_GET['menuid']?>" name="menuid">
 <div class="explain-col search-form">
+
 <select name="type" >
     <option value="">请选择</option>
     <option value="1" <?php if ($_GET['type']==1) {?>selected<?php }?>>用户ID</option>
-    <option value="1" <?php if ($_GET['type']==2) {?>selected<?php }?>>用户昵称</option>
-    <option value="2" <?php if ($_GET['type']==3) {?>selected<?php }?>>文章ID</option>
-    <option value="2" <?php if ($_GET['type']==4) {?>selected<?php }?>>文章标题</option>
+    <option value="2" <?php if ($_GET['type']==2) {?>selected<?php }?>>用户昵称</option>
+    <option value="3" <?php if ($_GET['type']==3) {?>selected<?php }?>>文章ID</option>
+    <option value="4" <?php if ($_GET['type']==4) {?>selected<?php }?>>评论ID</option>
  
 </select>
 <input type="text" value="<?php echo $_GET['q']?>" class="input-text" name="q">
@@ -63,9 +64,9 @@ include $this->admin_tpl('header', 'admin');
 发布日期  <?php echo form::date('start_addtime',$_GET['start_addtime'])?><?php echo L('to')?>   <?php echo form::date('end_addtime',$_GET['end_addtime'])?>
 
 <select name="islock">
-    <option value="" selected="">正常/禁发</option>
-    <option value="1" <?php if ($_GET['islock']==1) {?>selected<?php }?>>正常</option>
-    <option value="2" <?php if ($_GET['islock']==2) {?>selected<?php }?>>禁用</option>
+    <option value="" selected="">评论/举报</option>
+    <option value="1" <?php if ($_GET['islock']==1) {?>selected<?php }?>>评论</option>
+    <option value="2" <?php if ($_GET['islock']==2) {?>selected<?php }?>>举报</option>
 </select>
 
 <input type="submit" value="<?php echo L('search')?>" name="dosubmit" class="btn btn-sm" style="padding: 0 10px;">
@@ -85,7 +86,7 @@ include $this->admin_tpl('header', 'admin');
 			<th align="center"><strong>文章ID</strong></th>
             <th align="left"><strong>评论内容</strong></th>
             <th align="left"><strong>评论时间</strong></th>
-            <th align="left"><strong>评论级别</strong></th>
+            <th align="left"><strong>评论类型</strong></th>
             <th align="left"><strong>点赞量</strong></th>
             <th align="left"><strong>操作</strong></th>
 			

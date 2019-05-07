@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="07b19df2-5586-4657-9c8f-37fcb5f9e551" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/phpcms/modules/community/communityApi.php" beforeDir="false" afterPath="$PROJECT_DIR$/phpcms/modules/community/communityApi.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/phpcms/modules/community/install/community.sql" beforeDir="false" afterPath="$PROJECT_DIR$/phpcms/modules/community/install/community.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/phpcms/modules/hpshop/goodsApi.php" beforeDir="false" afterPath="$PROJECT_DIR$/phpcms/modules/hpshop/goodsApi.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/智能花盆模块接口.rp" beforeDir="false" afterPath="$PROJECT_DIR$/智能花盆模块接口.rp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phpcms/modules/community/community.php" beforeDir="false" afterPath="$PROJECT_DIR$/phpcms/modules/community/community.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phpcms/modules/zybaike/templates/pinglun.tpl.php" beforeDir="false" afterPath="$PROJECT_DIR$/phpcms/modules/zybaike/templates/pinglun.tpl.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,17 +13,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/phpcms/modules/community/communityApi.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="17" column="59" selection-start-line="17" selection-start-column="59" selection-end-line="17" selection-end-column="59" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -49,6 +38,8 @@
         <option value="$PROJECT_DIR$/phpcms/modules/zymember/zymemberApi.php" />
         <option value="$PROJECT_DIR$/phpcms/model/zycomment_model.class.php" />
         <option value="$PROJECT_DIR$/phpcms/modules/community/communityApi.php" />
+        <option value="$PROJECT_DIR$/phpcms/modules/community/community.php" />
+        <option value="$PROJECT_DIR$/phpcms/modules/community/templates/community.tpl.php" />
       </list>
     </option>
   </component>
@@ -74,6 +65,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -90,12 +82,6 @@
               <item name="zyznhh" type="b2602c69:ProjectViewProjectNode" />
               <item name="zyznhh" type="462c0819:PsiDirectoryNode" />
               <item name="phpcms" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="zyznhh" type="b2602c69:ProjectViewProjectNode" />
-              <item name="zyznhh" type="462c0819:PsiDirectoryNode" />
-              <item name="phpcms" type="462c0819:PsiDirectoryNode" />
               <item name="modules" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -105,11 +91,18 @@
               <item name="modules" type="462c0819:PsiDirectoryNode" />
               <item name="community" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="zyznhh" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zyznhh" type="462c0819:PsiDirectoryNode" />
+              <item name="phpcms" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+              <item name="community" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -117,6 +110,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="Errors" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -142,16 +136,17 @@
       <updated>1556262073058</updated>
       <workItem from="1556262075359" duration="5209000" />
       <workItem from="1557112117662" duration="184000" />
+      <workItem from="1557194181146" duration="875000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5393000" />
+    <option name="totallyTimeSpent" value="6268000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17929563" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17708333" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -304,8 +299,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/phpcms/modules/community/communityApi.php">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="7" column="20" lean-forward="true" selection-start-line="7" selection-start-column="20" selection-end-line="7" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/phpcms/modules/community/index.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/phpcms/modules/community/templates/community.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/phpcms/modules/community/community.php">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
-          <caret line="17" column="59" selection-start-line="17" selection-start-column="59" selection-end-line="17" selection-end-column="59" />
+          <caret line="17" column="31" lean-forward="true" selection-start-line="17" selection-start-column="31" selection-end-line="17" selection-end-column="31" />
         </state>
       </provider>
     </entry>

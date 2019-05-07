@@ -5,6 +5,16 @@ pc_base::load_sys_class('format', '', 0);
 pc_base::load_sys_class('form', '', 0);
 pc_base::load_app_func('global');
 
+/**
+ * @property bool|mixed member_db
+ * @property bool|mixed get_db
+ * @property bool|mixed member_detail_db
+ * @property bool|mixed admin
+ * @property bool|mixed report_db
+ * @property bool|mixed community_db
+ * @property bool|mixed zyconfig_db
+ * @property bool|mixed module_db
+ */
 class community extends admin {
 	function __construct() {
 		parent::__construct();
