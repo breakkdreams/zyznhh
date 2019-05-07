@@ -51,7 +51,7 @@ class community extends admin {
 
 
 	/**
-	* 编辑banner
+	* 编辑
 	*/
 	public function communityedit(){
 
@@ -112,7 +112,7 @@ class community extends admin {
 	/**
 	* 添加中间跳转
 	*/
-	public function banneredits(){
+	public function communityedits(){
 		showmessage(L('operation_success'), '', '', 'edit');
 	}
 
