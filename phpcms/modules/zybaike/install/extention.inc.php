@@ -75,56 +75,6 @@ $pinglun = $menu_db->insert(
 );
 
 
-/**
- * 添加菜单:好友模型管理
- */
-$pids = $menu_db->insert(
-	array(
-		'name'=>'zyhaoyou_model', //菜单名称
-		'parentid'=>$parentid, //添加到后台的主菜单里
-		'm'=>'zybaike', //模块
-		'c'=>'zybaike', //文件
-		'a'=>'zyhaoyou_model',//方法
-		'data'=>'', //附加参数
-		'listorder'=>0, //菜单排序
-		'display'=>'1'), //显示菜单 1是显示 0是隐藏
-	true //插入菜单之后，是否返回id
-);
-
-/**
- * 添加子菜单:好友管理
- */
-$haoyou = $menu_db->insert(
-	array(
-		'name'=>'zyhaoyou_model_manage', //菜单名称
-		'parentid'=>$pids, //添加到好友模型管理。
-		'm'=>'zybaike', //模块
-		'c'=>'zybaike',//文件
-		'a'=>'haoyou', //方法
-		'data'=>'', //附加参数
-		'listorder'=>1, //菜单排序
-		'display'=>'1' //显示菜单 1是显示 0是隐藏
-	),true//插入菜单之后，是否返回id
-);
-
-
-
-/**
- * 添加子菜单:聊天
- */
-$liaotian = $menu_db->insert(
-	array(
-		'name'=>'liaotian_manage', //菜单名称
-		'parentid'=>$pids, //添加到好友模型管理。
-		'm'=>'zybaike', //模块
-		'c'=>'zybaike',//文件 
-		'a'=>'liaotian', //方法
-		'data'=>'', //附加参数
-		'listorder'=>2, //菜单排序
-		'display'=>'1' //显示菜单 1是显示 0是隐藏
-		)//插入菜单之后，是否返回id
-	);
-		
 
 
 
@@ -136,9 +86,8 @@ $language = array(
 	'zybaike_manage' =>'花草百科',
 	'zywenzhang_manage_menu'=>'文章管理',
 	'zypinglun_manage_menu'=>'文章评论管理',
-	'zyhaoyou_model'=>'好友模型管理',
-	'zyhaoyou_model_manage'=>'好友管理',
-	'liaotian_manage'=>'聊天',
+
+
 );
 
 

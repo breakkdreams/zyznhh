@@ -52,9 +52,11 @@ include $this->admin_tpl('header', 'admin');
 <div class="explain-col search-form">
 <select name="type" >
     <option value="">请选择</option>
-    <option value="1" <?php if ($_GET['type']==1) {?>selected<?php }?>>用户名</option>
-    <option value="2" <?php if ($_GET['type']==2) {?>selected<?php }?>>文章标题</option>
-    <!-- <option value="3" <?php if ($_GET['type']==3) {?>selected<?php }?>>姓名</option> -->
+    <option value="1" <?php if ($_GET['type']==1) {?>selected<?php }?>>用户id</option>
+    <option value="2" <?php if ($_GET['type']==2) {?>selected<?php }?>>用户名</option>
+    <option value="3" <?php if ($_GET['type']==3) {?>selected<?php }?>>文章id</option>
+    <option value="4" <?php if ($_GET['type']==4) {?>selected<?php }?>>文章标题</option>
+    
     
 </select>
 <input type="text" value="<?php echo $_GET['q']?>" class="input-text" name="q">
@@ -121,7 +123,8 @@ if(is_array($info)){
 		<td><?php echo $info['fabulous-number']?></td>
 		<td><?php echo $info['forward-number']?></td>
 		<td><?php echo $info['comment-number']?></td>
-		<td><?php echo $info['report-number']?></td>
+		<td><a href="javascript:jubao(0);" onclick="jubao('<?php echo $info['id']?>')" class="btn btn-danger btn-sm" style="padding-top: 0;padding-bottom: 0;"><?php echo $info['report-number']?></a></td>
+		
 		 <td align="center">
             <?php if($info['islock']==0){ ?>
                 正常
@@ -175,6 +178,27 @@ function view(id) {
     },
     function(){
         window.top.art.dialog({id:'view'}).close()
+    });
+    void(0);
+}
+	
+function jubao(id) {
+    window.top.art.dialog({
+        id:'jubao',
+        iframe:'?m=zybaike&c=zybaike&a=jubao_view&type=1&id='+id,
+        title:'举报信息',
+        width:'500',
+        height:'500',
+        lock:true
+    },
+    function(){
+        var d = window.top.art.dialog({id:'jubao'}).data.iframe;
+        var form = d.document.getElementById('dosubmit');
+        form.click();
+        return false;
+    },
+    function(){
+        window.top.art.dialog({id:'jubao'}).close()
     });
     void(0);
 }

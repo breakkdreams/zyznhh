@@ -1,8 +1,9 @@
 <?php
 defined('IN_PHPCMS') or exit('No permission resources.');
-pc_base::load_app_func('global');
-pc_base::load_sys_class('form', '', 0);
+pc_base::load_app_class('admin', 'admin', 0);
 pc_base::load_sys_class('format', '', 0);
+pc_base::load_sys_class('form', '', 0);
+pc_base::load_app_func('global');
 
 
 
