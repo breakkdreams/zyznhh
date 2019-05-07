@@ -2244,15 +2244,15 @@ class api{
 		//==================	操作失败-验证 START
 			//请先登录
 			if (!$userid) {
-				$this->_return_status(-103);
+				$this->_return_status(-103,'','');
 			}
 			//账号不存在
 			if (!$memberinfo) {
-				$this->_return_status(-101);
+				$this->_return_status(-101,'','');
 			}
 			//帐号已锁定,无法登录
 			if($memberinfo['islock']==1) {
-				$this->_return_status(-102);
+				$this->_return_status(-102,'','');
 			}
 		//==================	操作失败-验证 END
 
@@ -2316,7 +2316,7 @@ class api{
 
 			$result = $this->member_footprint_db->insert($arr,true);
 
-			$this->_return_status(200);
+			$this->_return_status(200,'','');
 
 		//==================	操作成功-插入数据 END		
 		
@@ -2341,15 +2341,15 @@ class api{
 		//==================	操作失败-验证 START
 			//请先登录
 			if (!$userid) {
-				$this->_return_status(-103);
+				$this->_return_status(-103,'','');
 			}
 			//账号不存在
 			if (!$memberinfo) {
-				$this->_return_status(-101);
+				$this->_return_status(-101,'','');
 			}
 			//帐号已锁定,无法登录
 			if($memberinfo['islock']==1) {
-				$this->_return_status(-102);
+				$this->_return_status(-102,'','');
 			}
 		//==================	操作失败-验证 END
 
@@ -2372,7 +2372,7 @@ class api{
 			}
 
 
-			$this->_return_status(200,$item);
+			$this->_return_status(200,$item,'');
 
 		//==================	操作成功-显示数据 END
 		
@@ -2410,19 +2410,19 @@ class api{
 		//==================	操作失败-验证 START
 			//参数不能为空
 			if (!$store_logo || !$store_name || !$store_zmidcard || !$store_fmidcard || !$type || !$userid) {
-				$this->_return_status(-104);
+				$this->_return_status(-104,'','');
 			}
 			//请先登录
 			if (!$userid) {
-				$this->_return_status(-103);
+				$this->_return_status(-103,'','');
 			}
 			//账号不存在
 			if (!$memberinfo) {
-				$this->_return_status(-101);
+				$this->_return_status(-101,'','');
 			}
 			//帐号已锁定,无法登录
 			if($memberinfo['islock']==1) {
-				$this->_return_status(-102);
+				$this->_return_status(-102,'','');
 			}
 		//==================	操作失败-验证 END
 
@@ -2432,7 +2432,7 @@ class api{
 		//==================	操作成功 END
 			$this->member_db->update(['shopname'=>$store_name,'store_logo'=>$store_logo,'store_audit'=>1],['userid'=>$userid]);
 
-			$this->_return_status(200);
+			$this->_return_status(200,'','');
 		//==================	操作成功 END
 
 	}
