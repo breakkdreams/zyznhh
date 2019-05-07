@@ -5,16 +5,6 @@ pc_base::load_sys_class('format', '', 0);
 pc_base::load_sys_class('form', '', 0);
 pc_base::load_app_func('global');
 
-/**
- * @property bool|mixed member_db
- * @property bool|mixed get_db
- * @property bool|mixed member_detail_db
- * @property bool|mixed admin
- * @property bool|mixed report_db
- * @property bool|mixed community_db
- * @property bool|mixed zyconfig_db
- * @property bool|mixed module_db
- */
 class community extends admin {
 	function __construct() {
 		parent::__construct();
@@ -29,7 +19,7 @@ class community extends admin {
 		$this->zyconfig_db = pc_base::load_model('zyconfig_model');
 		$this->module_db = pc_base::load_model('module_model');
 		$this->config = $this->zyconfig_db->get_one('','url');
-		
+
 	}
 
 
@@ -51,8 +41,8 @@ class community extends admin {
 	/**
 	* 查看文章详情
 	*/
-	public function communityInfo(){			
-		$community = $this->community_db->get_one(array('id'=>$_GET['id']));	
+	public function communityInfo(){
+		$community = $this->community_db->get_one(array('id'=>$_GET['id']));
 		include $this->admin_tpl('communityinfo');
 	}
 
@@ -67,7 +57,7 @@ class community extends admin {
 
 		if($_POST['dosubmit']){
 			$id=$_POST['id'];
-	
+
 			$types = $_POST['type'];
 			$score = $_POST['score'];
 			$status = 0;
@@ -78,12 +68,12 @@ class community extends admin {
 				//拒绝(1.更改举报记录状态和积分值 2.减少积分)
 				$status = -1;
 			}
-			
+
         	$data=[
         		'status'=>$status,
 				'score'=>$score
         	];
-        	
+
 			$results=$this->report_db->update($data,array('id'=>$id));
 
 			$info = $this->report_db->get_one(array('id'=>$id));
@@ -109,9 +99,9 @@ class community extends admin {
 			}
 
         	showmessage(L('修改成功'), '?m=community&c=community&a=communityedits');
-			
+
 		}else{
-						
+
 			$info = $this->report_db->get_one(array('id'=>$_GET['id']));
 			$type = $_GET['type'];
 
@@ -128,15 +118,3 @@ class community extends admin {
 
 }
 ?>
-
-
-
-
-
-
-
-
-
-
-
-
