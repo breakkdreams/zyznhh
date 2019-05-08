@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 defined('IN_PHPCMS') or exit('No permission resources.');
 pc_base::load_app_class('admin', 'admin', 0);
 pc_base::load_sys_class('format', '', 0);
@@ -39,7 +40,7 @@ class communityApi {
 		}
 		$community = $this->community_db->listinfo($wheres,$order = '',$page, $pages = '10');
 		for($i=0;$i<sizeof($community);$i++){
-			$likes=$this->likes_db->get_one(array('beuserid'=>$community[$i]['userid'],'userid'=>$userid,'articleid'=>$community[$i]['id']));
+			$likes=$this->likes_db->get_one(['beuserid'=>$community[$i]['userid'],'userid'=>$userid,'articleid'=>$community[$i]['id']]);
 			if($likes!=null){
 				$community[$i]['islike'] = '1';
 			}else{
@@ -96,9 +97,9 @@ class communityApi {
             exit(json_encode($result,JSON_UNESCAPED_UNICODE));
 		}
 
-		$member=$this->member_db->get_one(array('userid'=>$userid));
+		$member=$this->member_db->get_one(['userid'=>$userid]);
 
-		$data_detail = array(
+		$data_detail = [
 			'catid'=>$catid,
 			'userid'=>$userid,
 			'userhead'=>$member['headimgurl'],
@@ -106,10 +107,9 @@ class communityApi {
 			'content'=>$content,
 			'img'=>$img,
 			'addtime'=>$addtime,
-			'catid'=>$catid,
 			'log'=>$log,
 			'lat'=>$lat,
-		);
+		];
 		
 		$res = $this->community_db->insert($data_detail);
 
@@ -147,9 +147,9 @@ class communityApi {
 		}
 		
 		if($userid){
-			$member=$this->member_db->get_one(array('userid'=>$userid));
+			$member=$this->member_db->get_one(['userid'=>$userid]);
 			
-			$info = array(
+			$info = [
 				'userid'=>$userid,//用户id
 				'username'=>$member['nickname'],//用户名
 				'userhead'=>$member['headimgurl'],//用户头像
@@ -158,11 +158,11 @@ class communityApi {
 				'img'=>$img,
 				'addtime'=>$addtime,
 				'pid'=>$pid, //父级评论id,
-			);	
+			];
 			$this->zycommnet_db->insert($info);
 			
 			//通过文章id查询评论对应的文章评论量字段进行增加
-			$community = $this->community_db->get_one(array('id'=>$articleid));
+			$community = $this->community_db->get_one(['id'=>$articleid]);
 			$num = $community['comment']+1;//表中的评论量加1
 			$this->community_db->update(['comment'=>$num],['id'=>$articleid]);
 			
@@ -187,12 +187,12 @@ class communityApi {
 
 		$data = catetree($pinglun);
 
-		$r=PHPTree::makeTree($data, array(
+		$r=PHPTree::makeTree($data, [
 
-		));
+		]);
 
 
-		$community=$this->community_db->get_one(array('id'=>$articleid));
+		$community=$this->community_db->get_one(['id'=>$articleid]);
 
 		$result = [
 			'status'=>'success',
@@ -233,24 +233,24 @@ class communityApi {
 		
 		if($userid){
 			
-			$info = array(
+			$info = [
 				'userid'=>$userid,//点赞的用户
 				'beuserid'=>$beuserid,//被点赞的用户
 				'articleid'=>$articleid,//文章id
 				'addtime'=>$addtime,
-			);	
+			];
 			$this->likes_db->insert($info);
 
 			if($type == 1){
 				//通过文章id查询评论对应的文章评论量字段进行增加
-				$community = $this->community_db->get_one(array('id'=>$articleid,'userid'=>$beuserid));
+				$community = $this->community_db->get_one(['id'=>$articleid,'userid'=>$beuserid]);
 				if($community!=null){
 					$num = $community['likes']+1;//表中的点赞量加1
 					$this->community_db->update(['likes'=>$num],['id'=>$articleid]);
 				}
 			}else{
 				//通过文章id查询评论对应的文章评论量字段进行增加
-				$zycommnet = $this->zycommnet_db->get_one(array('articleid'=>$articleid,'userid'=>$beuserid));
+				$zycommnet = $this->zycommnet_db->get_one(['articleid'=>$articleid,'userid'=>$beuserid]);
 				if($zycommnet!=null){
 					$num = $zycommnet['likes']+1;//表中的点赞量加1
 					$this->zycommnet_db->update(['likes'=>$num],['id'=>$zycommnet['id']]);
@@ -294,14 +294,14 @@ class communityApi {
 		}
 		
 		if($userid){
-			$info = array(
+			$info = [
 				'userid'=>$userid,//用户id
 				'content'=>$content,//举报内容
 				'status'=>$status,//举报状态(1举报成功 0审核 -1恶意举报)
 				'addtime'=>$addtime,
 				'score'=>$score,
 				'articleid'=>$articleid,
-			);	
+			];
 			$this->report_db->insert($info);
 					
 			$result = [
@@ -337,15 +337,15 @@ class communityApi {
 		}
 		
 		if($userid){
-			$info = array(
+			$info = [
 				'userid'=>$userid,//用户id
 				'befollowid'=>$befollowid,//被关注人id
 				'addtime'=>$addtime,
-			);	
+			];
 			$this->follow_db->insert($info);
 
 			//判断对方是否关注,是=>成为好友
-			$guanzhu=$this->follow_db->get_one(array('userid'=>$befollowid,'befollowid'=>$userid));
+			$guanzhu=$this->follow_db->get_one(['userid'=>$befollowid,'befollowid'=>$userid]);
 			if($guanzhu != null){
 				//成为好友
 			}
@@ -380,9 +380,9 @@ class communityApi {
 		}
 		
 		if($userid){
-			$follow = $this->follow_db->get_one(array('userid'=>$userid,'befollowid'=>$befollowid));
+			$follow = $this->follow_db->get_one(['userid'=>$userid,'befollowid'=>$befollowid]);
 			if($follow != null){
-				$this->follow_db->delete(array('id'=>$follow['id']));
+				$this->follow_db->delete(['id'=>$follow['id']]);
 				//删除好友
 
 			}

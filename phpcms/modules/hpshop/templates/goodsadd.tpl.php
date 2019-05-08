@@ -291,7 +291,6 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
 				}
 
                 $(data.attr).each(function(k,v){
-         
 					var tr = document.getElementById("mytable").insertRow();
 					tr.className="cylstr";
 

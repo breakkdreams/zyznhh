@@ -173,25 +173,25 @@ class goodsApi{
     }
 
 	/**
-     *获取用户商品搜索记录,分类
-     * param:uid(用户id)
-     */
-	public function goods_sh(){
+ *获取用户商品搜索记录,分类
+ * param:uid(用户id)
+ */
+    public function goods_sh(){
         require('classes/PHPTree.class.php');//加载树形结构类
-		$_userid = param::get_cookie('_userid');
-		$userid = $_POST['uid'];
+        $_userid = param::get_cookie('_userid');
+        $userid = $_POST['uid'];
 
-		if($_userid){
-			$uid = $_userid;
-		}else{
-			$uid = $userid;
-		}
+        if($_userid){
+            $uid = $_userid;
+        }else{
+            $uid = $userid;
+        }
         $hisarr = '';
-		if ( $uid != null ) {
+        if ( $uid != null ) {
             $info = $this->goods_sh_db->get_one(['userid'=>$uid]);
             $hisarr = string2array($info['searchHistory']);
-		}
-		//
+        }
+        //
         $infos = $this->goodscat_db->select('','id,cate_name,cate_img,pid','',$order = 'sort ASC,id ASC');
         $data = catetree($infos);
         //dump($infos,true);
@@ -199,18 +199,62 @@ class goodsApi{
 
         ));
 
-		$result = [
-			'status' => 'success',
-			'code' => 200,
-			'message' => '查询成功',
-			'data' => [
-				'hiscon' => $hisarr,
+        $result = [
+            'status' => 'success',
+            'code' => 200,
+            'message' => '查询成功',
+            'data' => [
+                'hiscon' => $hisarr,
                 'content' => $r
-			]
-		];
+            ]
+        ];
 
-		exit(json_encode($result,JSON_UNESCAPED_UNICODE));
-	}
+        exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+    }
+
+    /**
+     *获取用户商品搜索记录
+     * param:uid(用户id)
+     */
+    public function search_history(){
+        $userid = $_POST['uid'];
+        $hisarr = '';
+        if ( $userid != null ) {
+            $info = $this->goods_sh_db->get_one(['userid'=>$userid]);
+            $hisarr = string2array($info['searchHistory']);
+        }
+
+        $result = [
+            'status' => 'success',
+            'code' => 200,
+            'message' => '查询成功',
+            'hiscon' => $hisarr,
+        ];
+
+        exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+    }
+    /**
+     *获取二级分类
+     * param:uid(用户id)
+     */
+    public function goods_two_menu(){
+        require('classes/PHPTree.class.php');//加载树形结构类
+        $infos = $this->goodscat_db->select('','id,cate_name,cate_img,pid','',$order = 'sort ASC,id ASC');
+        $data = catetree($infos);
+        $r=PHPTree::makeTree($data, array(
+
+        ));
+
+        $result = [
+            'status' => 'success',
+            'code' => 200,
+            'message' => '查询成功',
+            'content' => $r
+
+        ];
+
+        exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+    }
 
     /**
      *商品详情
