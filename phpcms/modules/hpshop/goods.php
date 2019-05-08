@@ -312,7 +312,7 @@ class goods extends admin {
 				$this->goods_specs_db->query($sql);
         	}
 
-        	if(isset($_POST['goods_attrs'])){
+        	if(isset($_POST['goods_attrs'])){                               
 
         		$sqls= "replace into phpcms_goods_attr (`id`, `shopid`, `goodsid`, `attrid`, `val`) values";
 				foreach ($_POST['goods_attrs'] as $k => $v) {
